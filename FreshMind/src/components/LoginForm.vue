@@ -5,8 +5,7 @@
                 <form @submit.prevent="submitForm">
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="text" id="email" class="form-control" 
+                            <input type="text" id="email" placeholder="Email" class="form-control login-field"
                             @blur= "validateEmail(true)"
                             @input= "validateEmail(false)"
                             v-model="formData.email">
@@ -15,16 +14,20 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="password" class="form-label">Password:</label><br>
-                            <input type="password" id="password" class="form-control" 
+                            <input type="password" id="password" placeholder="Password" class="form-control" 
                             @blur="validatePassword(true)"
                             @input="validatePassword(false)"
                             v-model="formData.password">
                             <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <button type="button" class="btn btn-secondary" @click="submitLogin">Login</button>
+                    <div class="row mb-3">
+                        <div class="col-12 text-end forgot-password">
+                            <router-link to="/forgot-password" class="text-muted">Forgot Password?</router-link>
+                        </div>
+                    </div>
+                    <div class="row mb-3 text-center">
+                        <button type="button" class="btn btn-secondary login-btn" @click="submitLogin">Login</button>
                     </div>
                 </form>
                
@@ -41,8 +44,6 @@ import { ref } from 'vue';
       email: '',
       password: ''
   });
-  
-  const submittedCards = ref([]);
   
   const submitLogin = () => {
       validateEmail(true);
@@ -98,4 +99,14 @@ import { ref } from 'vue';
 </script>
 
 <style scoped>
+.login-btn{
+    background-color: #8E4739;
+    font-size: 32px;
+}
+
+.forgot-password{
+    margin-top: -10px;
+    color: #8E4739;
+}
+
 </style>
