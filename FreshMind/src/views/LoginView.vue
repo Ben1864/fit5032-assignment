@@ -38,14 +38,12 @@ import LoginForm from '@/components/LoginForm.vue';
     background-color: #8E4739;
     font-size: 32px;
     width: 80%;
-}
-
-.signup-btn:hover{
-    color: white;
-    font
+    --bs-btn-hover-bg: #8a5e55;
+    --bs-btn-active-bg: #4f2e27;
 }
 
 .vertical-divider{
     padding: 5%;
+    font-size: 20px;
 }
 </style>

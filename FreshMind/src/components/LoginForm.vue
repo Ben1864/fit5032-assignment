@@ -100,10 +100,11 @@ import { ref } from 'vue';
 
 <style scoped>
 .login-submit{
-    background-color: #8E4739;
+    --bs-btn-bg: #8E4739;
     font-size: 32px;
     width: 80%;
-
+    --bs-btn-hover-bg: #8a5e55;
+    --bs-btn-active-bg: #4f2e27;
 }
 .login-field{
     height: 100px;
