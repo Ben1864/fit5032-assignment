@@ -1,9 +1,9 @@
 <template>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-8 offset-md-2">
+            <div class="col-md-10 offset-md-1">
                 <form @submit.prevent="submitForm">
-                    <div class="row mb-3">
+                    <div class="row mb-5">
                         <div class="col-12">
                             <input type="text" id="email" placeholder="Email" class="form-control login-field"
                             @blur= "validateEmail(true)"
@@ -12,22 +12,22 @@
                             <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-8">
                         <div class="col-12">
-                            <input type="password" id="password" placeholder="Password" class="form-control" 
+                            <input type="password" id="password" placeholder="Password" class="form-control login-field" 
                             @blur="validatePassword(true)"
                             @input="validatePassword(false)"
                             v-model="formData.password">
                             <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-12 text-end forgot-password">
-                            <router-link to="/forgot-password" class="text-muted">Forgot Password?</router-link>
+                    <div class="row mb-5">
+                        <div class="col-12 text-end">
+                            <router-link to="/forgot-password" class="forgot-password text-muted">Forgot Password?</router-link>
                         </div>
                     </div>
-                    <div class="row mb-3 text-center">
-                        <button type="button" class="btn btn-secondary login-btn" @click="submitLogin">Login</button>
+                    <div class="row mb-3 text-center justify-content-center">
+                        <button type="button" class="btn btn-secondary login-submit" @click="submitLogin">Login</button>
                     </div>
                 </form>
                
@@ -99,14 +99,19 @@ import { ref } from 'vue';
 </script>
 
 <style scoped>
-.login-btn{
+.login-submit{
     background-color: #8E4739;
     font-size: 32px;
-}
+    width: 80%;
 
+}
+.login-field{
+    height: 100px;
+    padding-left: 6%;
+}
 .forgot-password{
     margin-top: -10px;
-    color: #8E4739;
+    color: #8E4739 !important;
 }
 
 </style>
