@@ -8,7 +8,9 @@ import AppHeader from "./components/AppHeader.vue"
   <header>
     <AppHeader/>
   </header>
-
+  <main>
+    <router-view></router-view>
+  </main>
   <!-- <HelloWorld /> -->
 </template>
 
