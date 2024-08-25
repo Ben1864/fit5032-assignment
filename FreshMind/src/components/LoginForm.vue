@@ -10,7 +10,7 @@
                             @blur= "validateEmail(true)"
                             @input= "validateEmail(false)"
                             v-model="formData.email">
-                            <div v-if="errors.username" class="text-danger">{{ errors.email }}</div>
+                            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -38,7 +38,7 @@
 import { ref } from 'vue';
   
   const formData = ref({
-      username: '',
+      email: '',
       password: ''
   });
   
@@ -57,7 +57,7 @@ import { ref } from 'vue';
   const validateEmail = (blur) => {
     // TODO: Validate email exists in database
     if (!checkEmailFormat(formData.value.email)){
-        if (blur) errors.email.username = "Please enter a valid email";
+        if (blur) errors.value.email = "Please enter a valid email";
     }else {
         errors.value.email = null;
     }
