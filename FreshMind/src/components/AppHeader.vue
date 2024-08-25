@@ -18,10 +18,6 @@
     </header>
 </template>
 
-<script>
-
-</script>
-
 <style>
 .logo-position{
     position: relative;
