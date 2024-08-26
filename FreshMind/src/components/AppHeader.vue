@@ -1,5 +1,5 @@
 <template>
-    <header class="py-2 mb-3 border-bottom logo-background-colour">
+    <header class="py-2 border-bottom logo-background-colour">
         <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
             <div class="logo-position">
                 <router-link to="/" active-class="active" aria-current="page" class="col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none">
@@ -16,7 +16,59 @@
             </div>
         </div>
     </header>
+    <nav class="bg-light border-bottom align-items-center">
+        <ul class="logo-position nav me-auto">
+            <div class="dropdown">
+                <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    Get Help
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
+                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    Get Information
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
+                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    Get Involved
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
+                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    About
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
+                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                </ul>
+            </div>
+        </ul>
+    </nav>
 </template>
+
+<script setup>
+    
+</script>
 
 <style>
 .logo-position{
@@ -24,11 +76,23 @@
     padding-left: 2%;
 }
 
+.dropdown-item{
+    --bs-dropdown-link-active-bg: #FFF4D5;
+    --bs-dropdown-link-active-color: #000000;
+    color: #B7A5A5;
+}
+
 .login-btn{
     padding-left: 3rem;
     padding-right: 3rem; 
     border-color: #C9A07A;
     color: #ffffff;
+}
+
+.header-link{
+    color: #B7A5A5;
+    font-weight: bold;
+    --bs-nav-link-hover-color: #6c6464;
 }
 
 /* Adjustments for smaller screens */
