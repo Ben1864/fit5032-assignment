@@ -23,10 +23,8 @@
                     Get Help
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">For Myself</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">For Someone Else</router-link></li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -34,10 +32,9 @@
                     Get Information
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Mental Health Conditions</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Facts and Stats</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Resources</router-link></li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -45,10 +42,9 @@
                     Get Involved
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Volunteering</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Community Events</router-link></li>
+                    <!-- <li><router-link to="/" class="dropdown-item">Dashboard</router-link></li> -->
                 </ul>
             </div>
             <div class="dropdown">
@@ -56,10 +52,9 @@
                     About
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Option 1</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 2</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 3</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Option 4</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">About Us</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Contact Us</router-link></li>
+                    <li><router-link to="/" class="dropdown-item">Reviews</router-link></li>
                 </ul>
             </div>
         </ul>
@@ -79,7 +74,7 @@
 .dropdown-item{
     --bs-dropdown-link-active-bg: #FFF4D5;
     --bs-dropdown-link-active-color: #000000;
-    color: #B7A5A5;
+    color: #af9b9b;
 }
 
 .login-btn{
