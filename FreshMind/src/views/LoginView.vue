@@ -15,7 +15,7 @@ import LoginForm from '@/components/LoginForm.vue';
                 <div class="text-center vertical-divider">or</div>
             </div>
             <div class="row mb-3 text-center justify-content-center">
-                <router-link to="/">
+                <router-link to="/signup">
                     <button type="button" class="btn btn-secondary signup-btn">Sign Up</button>
                 </router-link>
                 
