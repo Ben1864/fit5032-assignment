@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref } from 'vue';
-  
+import { checkEmailFormat } from '@/utils/validation';
   const formData = ref({
       email: '',
       password: ''
@@ -54,7 +54,6 @@ import { ref } from 'vue';
     email: null,
     password: null
   })
-
   const validateEmail = (blur) => {
     // TODO: Validate email exists in database
     if (!checkEmailFormat(formData.value.email)){
@@ -63,15 +62,6 @@ import { ref } from 'vue';
         errors.value.email = null;
     }
   }
-
-  const checkEmailFormat = (email) => {
-    /*
-        Regex email validation
-        Returns True if a valid email
-    */
-    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-  }
-
   const validatePassword = (blur) => {
     const password = formData.value.password;
     const minLength = 8;
@@ -94,22 +84,18 @@ import { ref } from 'vue';
         errors.value.password = null;
     }
   }
-
   
 </script>
 
 <style scoped>
 .login-submit{
-    --bs-btn-bg: #8E4739;
-    font-size: 32px;
-    width: 80%;
-    --bs-btn-hover-bg: #8a5e55;
-    --bs-btn-active-bg: #4f2e27;
+  --bs-btn-bg: #8E4739;
+  font-size: 32px;
+  width: 80%;
+  --bs-btn-hover-bg: #8a5e55;
+  --bs-btn-active-bg: #4f2e27;
 }
-.login-field{
-    height: 100px;
-    padding-left: 6%;
-}
+
 .forgot-password{
     margin-top: -10px;
     color: #8E4739 !important;
