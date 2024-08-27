@@ -28,10 +28,10 @@ import LoginForm from '@/components/LoginForm.vue';
 <style>
 
 .border-end {
-    border-right: 1px solid #949494 !important; /* Adjust color and width as needed */
+    border-right: 1px solid #949494 !important;
 }
 .pe-3 {
-    padding-right: 1rem; /* Add padding to the right side of the content */
+    padding-right: 1rem;
 }
 
 .signup-btn{
