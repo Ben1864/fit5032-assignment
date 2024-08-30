@@ -5,7 +5,8 @@ export default createStore({
   state: {
     isAuthenticated: useStorage('isAuthenticated', false),
     user: useStorage('user', null),
-    registeredUsers: useStorage('registeredUsers', [])
+    registeredUsers: useStorage('registeredUsers', []),
+    adminList: ['ben@gmail.com']
   },
   mutations: {
     setAuthentication(state, status) {
@@ -24,7 +25,6 @@ export default createStore({
       const userEmail = user.email
       const userPassword = user.password
       const userFromEmail = getters.getUserByEmail(userEmail)
-      console.log(userFromEmail)
       if (userFromEmail !== null && userFromEmail.password === userPassword) {
         commit('setAuthentication', true)
         commit('setUser', userFromEmail)
@@ -55,6 +55,9 @@ export default createStore({
     },
     getUserByEmail: (state) => (email) => {
       return state.registeredUsers.find((user) => user.email === email) || null
+    },
+    userIsAdmin: (state) => (user) => {
+      return adminList.contains(user.email)
     }
   }
 })
