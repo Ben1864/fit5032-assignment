@@ -9,9 +9,14 @@
             <div class="d-flex align-items-center">
                 <div class="w-100 me-3"></div>
                 <div class="d-flex flex-shrink-0 col-12-sm">
-                    <router-link to="/login" active-class="active" aria-current="page">
-                        <button type="button" class="login-btn btn btn-outline-light me-2">Login</button>
-                    </router-link>
+                    <div v-if="store.state.isAuthenticated == false">
+                        <router-link to="/login" active-class="active" aria-current="page">
+                            <button type="button" class="login-btn btn btn-outline-light me-2">Login</button>
+                        </router-link>
+                    </div>
+                    <div v-else>
+                        <button type="button" @click="logout()" class="login-btn btn btn-outline-light me-2">Logout</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,7 +67,15 @@
 </template>
 
 <script setup>
-    
+    import store from '@/store/store';
+
+    const logout = () => {
+        try{
+            store.dispatch('logout');
+        }catch (error) {
+            console.error('Error logging out:', error);
+        }
+    }
 </script>
 
 <style>

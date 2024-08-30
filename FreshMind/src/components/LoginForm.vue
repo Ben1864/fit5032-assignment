@@ -39,22 +39,32 @@
 
 <script setup>
 import { ref } from 'vue';
-  
+import { checkEmailFormat } from '@/utils/validation';
+import store from '@/store/store';
+import router from '@/router';
+
   const formData = ref({
       email: '',
       password: ''
   });
   
-  const submitLogin = () => {
-      validateEmail(true);
-      validatePassword(true);
-      // TODO: Login user
+  const submitLogin = async () => {
+      if(validateLoginData(true)){
+        const user = formData.value;
+        try{
+            const successfulLogin = await store.dispatch('login', user);
+            if (successfulLogin) {
+                router.push({ name: 'home' })
+            }
+        }catch (error) {
+            console.error('Error logging in:', error);
+        }
+      }
   };
   const errors = ref({
     email: null,
     password: null
   })
-
   const validateEmail = (blur) => {
     // TODO: Validate email exists in database
     if (!checkEmailFormat(formData.value.email)){
@@ -64,14 +74,14 @@ import { ref } from 'vue';
     }
   }
 
-  const checkEmailFormat = (email) => {
-    /*
-        Regex email validation
-        Returns True if a valid email
-    */
-    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  const validateLoginData = (blur) => {
+    validateEmail(true);
+    validatePassword(true);
+    if (Object.values(errors.value).every(value => value === null)) {
+        return true
+    }
+    return false
   }
-
   const validatePassword = (blur) => {
     const password = formData.value.password;
     const minLength = 8;
@@ -94,22 +104,18 @@ import { ref } from 'vue';
         errors.value.password = null;
     }
   }
-
   
 </script>
 
 <style scoped>
 .login-submit{
-    --bs-btn-bg: #8E4739;
-    font-size: 32px;
-    width: 80%;
-    --bs-btn-hover-bg: #8a5e55;
-    --bs-btn-active-bg: #4f2e27;
+  --bs-btn-bg: #8E4739;
+  font-size: 32px;
+  width: 80%;
+  --bs-btn-hover-bg: #8a5e55;
+  --bs-btn-active-bg: #4f2e27;
 }
-.login-field{
-    height: 100px;
-    padding-left: 6%;
-}
+
 .forgot-password{
     margin-top: -10px;
     color: #8E4739 !important;

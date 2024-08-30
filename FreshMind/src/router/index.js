@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import store from '@/store/store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,21 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter: (to, from, next) => {
+        const isAuthenticated = store.state.isAuthenticated
+        if (isAuthenticated) {
+          // Redirect to home if trying to access login while authenticated
+          next({ name: 'home' })
+        } else {
+          next() // Proceed to login page
+        }
+      }
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/SignUpView.vue')
     },
     {
       path: '/forgot-password',
