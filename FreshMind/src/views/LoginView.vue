@@ -15,7 +15,7 @@ import LoginForm from '@/components/LoginForm.vue';
                 <div class="text-center vertical-divider">or</div>
             </div>
             <div class="row mb-3 text-center justify-content-center">
-                <router-link to="/">
+                <router-link to="/signup">
                     <button type="button" class="btn btn-secondary signup-btn">Sign Up</button>
                 </router-link>
                 
@@ -28,10 +28,10 @@ import LoginForm from '@/components/LoginForm.vue';
 <style>
 
 .border-end {
-    border-right: 1px solid #949494 !important; /* Adjust color and width as needed */
+    border-right: 1px solid #949494 !important;
 }
 .pe-3 {
-    padding-right: 1rem; /* Add padding to the right side of the content */
+    padding-right: 1rem;
 }
 
 .signup-btn{

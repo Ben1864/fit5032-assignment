@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.0.4",
+    "@vueuse/core": "^11.0.3",
     "bootstrap": "^5.3.3",
     "primevue": "^4.0.4",
     "vue": "^3.4.29",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.4.3",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
