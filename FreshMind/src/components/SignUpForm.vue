@@ -50,7 +50,7 @@
                             </div>
                             <div class="row mb-5">
                                 <div class="col-12">
-                                    <input type="text" id="password" placeholder="Password" class="form-control login-field" 
+                                    <input type="password" id="password" placeholder="Password" class="form-control login-field" 
                                     @blur="validatePassword(true)"
                                     @input="validatePassword(false)"
                                     v-model="formData.password">
@@ -59,7 +59,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <input type="text" id="retypePassword" placeholder="Retype Password" class="form-control login-field" 
+                                    <input type="password" id="retypePassword" placeholder="Retype Password" class="form-control login-field" 
                                     @blur="validateRetypePassword(true)"
                                     @input="validateRetypePassword(false)"
                                     v-model="formData.retypePassword">
@@ -78,8 +78,11 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
-    import { checkEmailFormat } from '@/utils/validation';
+  import { ref } from 'vue';
+  import { checkEmailFormat } from '@/utils/validation';
+  import store from '@/store/store';
+import router from '@/router';
+
   const formData = ref({
       firstName: '',
       lastName: '',
@@ -88,20 +91,52 @@
       password: '',
       retypePassword: ''
   });
+
+
+
   
-  const submitSignUp= () => {
-      validateEmail(true);
-      validatePassword(true);
-      // TODO: SignUp user
+  const submitSignUp= async () => {
+      if (validateSignUpData(true)){
+        const user = formData.value;
+        try {
+            const successfulRegister = await store.dispatch('register', user);
+            if (successfulRegister) {
+                const successfulLogin = await store.dispatch('login', user);
+                if(successfulLogin) {
+                    router.push({ name: 'home' })
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error during sign up or login:', error)
+        }
+      }
   };
+
+  const validateSignUpData = (blur) => {
+    validateEmail(blur)
+    validatePassword(blur) //also validates retypePassword
+    validateDOB(blur)
+    validateFirstName(blur)
+    validateFirstName(blur)
+    validateLastName(blur)
+    //if there is no errors
+    if (Object.values(errors.value).every(value => value === null)) {
+        return true
+    }
+    return false
+  }
+
   const errors = ref({
     firstName: null,
     lastName: null,
     dob: null,  
     email: null,
     password: null,
-    retypePassword: null
+    retypePassword: null,
+    signUp: null
   })
+
   const validateEmail = (blur) => {
     if (!checkEmailFormat(formData.value.email)){
         if (blur) errors.value.email = "Please enter a valid email";
@@ -114,31 +149,39 @@
     const DOB = Date.parse(formData.value.dob);
     if (DOB > Date.now()) {
         if (blur) errors.value.dob = 'Date of birth can not be in the future';
-    }else{
+    }else if(formData.value.dob === '') {
+        if (blur) errors.value.dob = 'Please enter a value for your date of birth'
+    } else{
         errors.value.dob = null;
     }
   }
 
   const validateFirstName = (blur) => {
-    const hasNumber = /\d/.test(formData.value.firstName);
-    const hasSpecialChar = /[!@#$%^*(),.<>?":|{}_]/.test(formData.value.firstName);
+    const firstName = formData.value.firstName 
+    const hasNumber = /\d/.test(firstName);
+    const hasSpecialChar = /[!@#$%^*(),.<>?":|{}_]/.test(firstName);
     if (hasNumber) {
         if (blur) errors.value.firstName = "First name can not contain a number.";
     } else if (hasSpecialChar) {
         if (blur) errors.value.firstName = "First name can not contain a special character.";
+    } else if (firstName.length <= 1){
+        if (blur) errors.value.firstName = "Please enter a value for your first name"
     } else {
         errors.value.firstName = null;
     }
 }
 
-    const validateLastName = (blur) => {
-    const hasNumber = /\d/.test(formData.value.lastName);
-    const hasSpecialChar = /[!@#$%^*(),.<>?":|{}_]/.test(formData.value.lastName);
+    const validateLastName = (blur) => { 
+    const lastName = formData.value.lastName
+    const hasNumber = /\d/.test(lastName);
+    const hasSpecialChar = /[!@#$%^*(),.<>?":|{}_]/.test(lastName);
     if (hasNumber) {
         if (blur) errors.value.lastName = "Last name can not contain a number.";
     } else if (hasSpecialChar) {
         if (blur) errors.value.lastName = "Last name can not contain a special character.";
-    } else {
+    } else if (lastName.length <= 1){
+        if (blur) errors.value.lastName = "Please enter a value for your last name"
+    }else {
         errors.value.lastName = null;
     }
 }
@@ -147,7 +190,7 @@
     const password = formData.value.password;
     const retypePassword = formData.value.retypePassword;
 
-    if (password != retypePassword) {
+    if (password != retypePassword && retypePassword.length > 0) {
         if (blur) errors.value.retypePassword = 'Passwords must match';
     }
     else {
@@ -175,6 +218,7 @@
     } else {
         errors.value.password = null;
     }
+    validateRetypePassword(blur);
   }
 </script>
 

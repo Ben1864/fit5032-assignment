@@ -40,15 +40,26 @@
 <script setup>
 import { ref } from 'vue';
 import { checkEmailFormat } from '@/utils/validation';
+import store from '@/store/store';
+import router from '@/router';
+
   const formData = ref({
       email: '',
       password: ''
   });
   
-  const submitLogin = () => {
-      validateEmail(true);
-      validatePassword(true);
-      // TODO: Login user
+  const submitLogin = async () => {
+      if(validateLoginData(true)){
+        const user = formData.value;
+        try{
+            const successfulLogin = await store.dispatch('login', user);
+            if (successfulLogin) {
+                router.push({ name: 'home' })
+            }
+        }catch (error) {
+            console.error('Error logging in:', error);
+        }
+      }
   };
   const errors = ref({
     email: null,
@@ -61,6 +72,15 @@ import { checkEmailFormat } from '@/utils/validation';
     }else {
         errors.value.email = null;
     }
+  }
+
+  const validateLoginData = (blur) => {
+    validateEmail(true);
+    validatePassword(true);
+    if (Object.values(errors.value).every(value => value === null)) {
+        return true
+    }
+    return false
   }
   const validatePassword = (blur) => {
     const password = formData.value.password;
