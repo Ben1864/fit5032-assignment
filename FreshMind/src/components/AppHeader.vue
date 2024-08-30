@@ -50,7 +50,7 @@
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
                     <li><router-link to="/" class="dropdown-item">Volunteering</router-link></li>
                     <li><router-link to="/" class="dropdown-item">Community Events</router-link></li>
-                    <!-- <li><router-link to="/" class="dropdown-item">Dashboard</router-link></li> -->
+                    <li v-if="store.state.isAdmin == true"><router-link to="/" class="dropdown-item">Dashboard</router-link></li>
                 </ul>
             </div>
             <div class="dropdown">
