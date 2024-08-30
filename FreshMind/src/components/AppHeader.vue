@@ -1,4 +1,5 @@
 <template>
+    <LogoutModal></LogoutModal>
     <header class="py-2 border-bottom logo-background-colour">
         <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
             <div class="logo-position">
@@ -15,7 +16,7 @@
                         </router-link>
                     </div>
                     <div v-else>
-                        <button type="button" @click="logout()" class="login-btn btn btn-outline-light me-2">Logout</button>
+                        <button type="button"  class="login-btn btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</button>
                     </div>
                 </div>
             </div>
@@ -67,15 +68,8 @@
 </template>
 
 <script setup>
-    import store from '@/store/store';
-
-    const logout = () => {
-        try{
-            store.dispatch('logout');
-        }catch (error) {
-            console.error('Error logging out:', error);
-        }
-    }
+import store from '@/store/store';
+import LogoutModal from './LogoutModal.vue';
 </script>
 
 <style>
