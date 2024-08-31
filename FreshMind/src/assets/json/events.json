@@ -9,8 +9,8 @@
         "organizer": "FreshMind Australia",
         "attendees": 50,
         "tags": ["mental health", "workshop", "awareness"],
-        "image": "https://example.com/images/mental-health-workshop.jpg",
-        "status": "Not Attending"
+        "image": "/src/assets/images/Mindfulness_workshop.jpeg",
+        "status": null
     },
     {
         "id": 2,
@@ -22,8 +22,8 @@
         "organizer": "FreshMind Australia",
         "attendees": 30,
         "tags": ["therapy", "online", "mental health"],
-        "image": "https://example.com/images/online-therapy-session.jpg",
-        "status": "Not Attending"
+        "image": "/src/assets/images/Online-Therapy.jpg",
+        "status": null
       },
       {
         "id": 3,
@@ -35,8 +35,8 @@
         "organizer": "FreshMind Australia",
         "attendees": 100,
         "tags": ["stress management", "webinar", "mental health"],
-        "image": "https://example.com/images/stress-management-webinar.jpg",
-        "status": "Not Attending"
+        "image": "/src/assets/images/Stress-Management.webp",
+        "status": null
       },
       {
         "id": 4,
@@ -48,7 +48,7 @@
         "organizer": "FreshMind Australia",
         "attendees": 20,
         "tags": ["support group", "community", "mental health"],
-        "image": "https://example.com/images/community-support-group.jpg",
-        "status": "Not Attending"
+        "image": "/src/assets/images/Group Meeting.webp",
+        "status": null
       }
 ]

@@ -4,7 +4,7 @@
         <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
             <div class="logo-position">
                 <router-link to="/" active-class="active" aria-current="page" class="col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none">
-                    <img class="bi me-2" height="50" width="190" src="../assets/freshmind-logo.png"></img>
+                    <img class="bi me-2" height="50" width="190" src="../assets/images/freshmind-logo.png"></img>
                 </router-link>
             </div>
             <div class="d-flex align-items-center">

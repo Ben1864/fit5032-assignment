@@ -51,7 +51,8 @@ import router from '@/router';
         const user = formData.value;
         try{
             const successfulLogin = await store.dispatch('login', user);
-            if (successfulLogin) {  
+            if (successfulLogin) {
+                console.log("Successful Login")  
                 router.push({ name: 'Home' })
             }
         }catch (error) {
