@@ -64,8 +64,6 @@ export default createStore({
     },
     userIsAdmin: (state) => (user) => {
       //True if users email is in admin list
-      console.log(state.adminList)
-      console.log(user.email)
       return state.adminList.includes(user.email)
     }
   }
