@@ -25,7 +25,6 @@
   </template>
   
 <script setup>
-    import { computed } from 'vue';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import createdEvents from '../assets/json/events.json';
