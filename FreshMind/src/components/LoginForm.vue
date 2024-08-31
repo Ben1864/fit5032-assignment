@@ -5,7 +5,7 @@
                 <form @submit.prevent="submitForm">
                     <div class="row mb-5">
                         <div class="col-12">
-                            <input type="text" id="email" placeholder="Email" class="form-control login-field"
+                            <input required type="text" id="email" placeholder="Email" class="form-control login-field"
                             @blur= "validateEmail(true)"
                             @input= "validateEmail(false)"
                             v-model="formData.email">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="row mb-8">
                         <div class="col-12">
-                            <input type="password" id="password" placeholder="Password" class="form-control login-field" 
+                            <input required type="password" id="password" placeholder="Password" class="form-control login-field" 
                             @blur="validatePassword(true)"
                             @input="validatePassword(false)"
                             v-model="formData.password">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="row mb-3 text-center justify-content-center">
-                        <button type="button" class="btn btn-secondary login-submit" @click="submitLogin">Login</button>
+                        <button type="button" class="btn btn-secondary action-btn" @click="submitLogin">Login</button>
                     </div>
                 </form>
             </div>
@@ -106,13 +106,6 @@ import router from '@/router';
 </script>
 
 <style scoped>
-.login-submit{
-  --bs-btn-bg: #8E4739;
-  font-size: 32px;
-  width: 80%;
-  --bs-btn-hover-bg: #8a5e55;
-  --bs-btn-active-bg: #4f2e27;
-}
 
 .forgot-password{
     margin-top: -10px;
