@@ -40,6 +40,7 @@ export default createStore({
     logout({ commit }) {
       commit('setAuthentication', false)
       commit('setUser', null)
+      commit('setAdmin', false)
     },
     register({ commit, getters }, user) {
       //Return true if the user is successfully registered
