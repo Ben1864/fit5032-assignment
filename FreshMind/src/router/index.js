@@ -45,7 +45,7 @@ const router = createRouter({
     {
       path: '/community-events',
       name: 'CommunityEvents',
-      component: () => import('../views/EventsView.vue')
+      component: () => import('../views/CommunityEventsView.vue')
     },
     {
       path: '/community-events/:id', // Dynamic route with ID parameter
@@ -55,7 +55,7 @@ const router = createRouter({
     },
     {
       path: '/add-event',
-      name: 'Add-event',
+      name: 'AddEvent',
       component: () => import('../views/AddEventView.vue')
     }
   ]

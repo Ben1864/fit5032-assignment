@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import AppHeader from "./components/AppHeader.vue"
 </script>
 
@@ -11,7 +10,6 @@ import AppHeader from "./components/AppHeader.vue"
   <main>
     <router-view></router-view>
   </main>
-  <!-- <HelloWorld /> -->
 </template>
 
 <style scoped>
