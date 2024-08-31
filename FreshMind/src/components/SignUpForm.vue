@@ -103,7 +103,7 @@ import router from '@/router';
             if (successfulRegister) {
                 const successfulLogin = await store.dispatch('login', user);
                 if(successfulLogin) {
-                    router.push({ name: 'home' })
+                    router.push({ name: 'Home' })
                 }
             }
             

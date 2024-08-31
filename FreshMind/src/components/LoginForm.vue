@@ -52,7 +52,7 @@ import router from '@/router';
         try{
             const successfulLogin = await store.dispatch('login', user);
             if (successfulLogin) {  
-                router.push({ name: 'home' })
+                router.push({ name: 'Home' })
             }
         }catch (error) {
             console.error('Error logging in:', error);
