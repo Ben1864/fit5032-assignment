@@ -2,53 +2,73 @@
     {
         "id": 1,
         "title": "Mental Health Awareness Workshop",
-        "description": "A workshop to discuss mental health issues and coping strategies.",
+        "description": "A comprehensive workshop aimed at increasing awareness about mental health issues. Participants will engage in discussions about various mental health challenges and effective coping strategies. This workshop includes interactive activities and expert talks to provide a holistic understanding of mental health.",
         "date": "2024-09-15",
-        "time": "10:00 AM",
+        "startTime": "10:00 AM",
+        "finishTime": "11:00 AM",
         "location": "Community Hall, Melbourne",
-        "organizer": "FreshMind Australia",
+        "organiser": "FreshMind Australia",
         "attendees": 50,
         "tags": ["mental health", "workshop", "awareness"],
         "image": "/src/assets/images/Mindfulness_workshop.jpeg",
-        "status": null
+        "status": null,
+        "contact": {
+            "email": "info@freshmindaustralia.org",
+            "phone": "+61 3 1234 5678"
+        }
     },
     {
         "id": 2,
         "title": "Online Therapy Session",
-        "description": "An online session with a licensed therapist.",
+        "description": "Join us for an online therapy session conducted by a licensed therapist. This session is designed to offer professional support and guidance on mental health issues. It's a convenient way to receive help from the comfort of your home. Please ensure you have a stable internet connection and a quiet environment for the session.",
         "date": "2024-09-20",
-        "time": "02:00 PM",
+        "startTime": "02:00 PM",
+        "finishTime": "04:00 PM",
         "location": "Zoom",
-        "organizer": "FreshMind Australia",
+        "organiser": "FreshMind Australia",
         "attendees": 30,
         "tags": ["therapy", "online", "mental health"],
         "image": "/src/assets/images/Online-Therapy.jpg",
-        "status": null
-      },
-      {
+        "status": null,
+        "contact": {
+            "email": "support@freshmindaustralia.org",
+            "phone": "+61 3 9876 5432"
+        }
+    },
+    {
         "id": 3,
         "title": "Stress Management Webinar",
-        "description": "A webinar to learn stress management techniques.",
+        "description": "This webinar focuses on teaching effective stress management techniques. Learn how to identify stressors and employ strategies to manage stress in a healthy way. The session includes expert insights, practical exercises, and interactive Q&A to help participants better handle stress in their daily lives.",
         "date": "2024-09-25",
-        "time": "01:00 PM",
+        "startTime": "01:00 PM",
+        "finishTime": "03:00 PM",
         "location": "Online",
-        "organizer": "FreshMind Australia",
+        "organiser": "FreshMind Australia",
         "attendees": 100,
         "tags": ["stress management", "webinar", "mental health"],
         "image": "/src/assets/images/Stress-Management.webp",
-        "status": null
-      },
-      {
+        "status": null,
+        "contact": {
+            "email": "info@freshmindaustralia.org",
+            "phone": "+61 3 2345 6789"
+        }
+    },
+    {
         "id": 4,
         "title": "Community Support Group Meeting",
-        "description": "A monthly meeting for community support group members.",
+        "description": "A monthly gathering for members of the community support group to discuss ongoing challenges, share experiences, and provide mutual support. This meeting fosters a sense of community and encourages participants to connect and support each other. Light refreshments will be provided.",
         "date": "2024-10-01",
-        "time": "05:00 PM",
+        "startTime": "05:00 PM",
+        "finishTime": "05:30 PM",
         "location": "Local Community Center",
-        "organizer": "FreshMind Australia",
+        "organiser": "FreshMind Australia",
         "attendees": 20,
         "tags": ["support group", "community", "mental health"],
         "image": "/src/assets/images/Group Meeting.webp",
-        "status": null
-      }
+        "status": null,
+        "contact": {
+            "email": "contact@freshmindaustralia.org",
+            "phone": "+61 3 3456 7890"
+        }
+    }
 ]
