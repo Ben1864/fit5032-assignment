@@ -4,23 +4,27 @@ import { useStorage } from '@vueuse/core'
 export default createStore({
   state: {
     isAuthenticated: useStorage('isAuthenticated', false),
-    user: useStorage('user', null),
+    currentUser: useStorage('user', null),
     registeredUsers: useStorage('registeredUsers', []),
     adminList: ['ben@gmail.com', 'ridgesben1864@gmail.com'],
-    isAdmin: useStorage('isAdmin', false)
+    isAdmin: useStorage('isAdmin', false),
+    attendingEvents: useStorage('attendingEvents', [])
   },
   mutations: {
     setAuthentication(state, status) {
       state.isAuthenticated = status
     },
     setUser(state, user) {
-      state.user = user
+      state.currentUser = user
     },
     registerUser(state, user) {
       state.registeredUsers.push(user)
     },
     setAdmin(state, isAdmin) {
       state.isAdmin = isAdmin
+    },
+    addEvent(state, event) {
+      state.attendingEvents.push(event)
     }
   },
   actions: {
@@ -66,6 +70,9 @@ export default createStore({
     userIsAdmin: (state) => (user) => {
       //True if users email is in admin list
       return state.adminList.includes(user.email)
+    },
+    userIsAttending: (state) => (event) => {
+      return state.attendingEvents.includes(event.id)
     }
   }
 })
