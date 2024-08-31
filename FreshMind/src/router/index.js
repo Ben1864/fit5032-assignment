@@ -25,7 +25,7 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         const isAuthenticated = store.state.isAuthenticated
         if (isAuthenticated) {
-          // Redirect to home if trying to access login while authenticated
+          // Redirect to home if trying to access login while already authenticated
           next({ name: 'home' })
         } else {
           next() // Proceed to login page
@@ -41,6 +41,11 @@ const router = createRouter({
       path: '/forgot-password',
       name: 'forgot-password',
       component: () => import('../views/ForgotPasswordView.vue')
+    },
+    {
+      path: '/community-events',
+      name: 'community-events',
+      component: () => import('../views/EventsView.vue')
     }
   ]
 })

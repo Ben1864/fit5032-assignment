@@ -58,7 +58,7 @@
                     About
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">About Us</router-link></li>
+                    <li><router-link to="/about" class="dropdown-item">About Us</router-link></li>
                     <li><router-link to="/" class="dropdown-item">Contact Us</router-link></li>
                     <li><router-link to="/" class="dropdown-item">Reviews</router-link></li>
                 </ul>
