@@ -30,11 +30,9 @@
                         <button type="button" class="btn btn-secondary login-submit" @click="submitLogin">Login</button>
                     </div>
                 </form>
-               
             </div>
         </div>
     </div>
-
 </template>
 
 <script setup>
@@ -47,13 +45,13 @@ import router from '@/router';
       email: '',
       password: ''
   });
-  
+
   const submitLogin = async () => {
       if(validateLoginData(true)){
         const user = formData.value;
         try{
             const successfulLogin = await store.dispatch('login', user);
-            if (successfulLogin) {
+            if (successfulLogin) {  
                 router.push({ name: 'home' })
             }
         }catch (error) {

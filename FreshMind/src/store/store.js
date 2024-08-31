@@ -6,7 +6,8 @@ export default createStore({
     isAuthenticated: useStorage('isAuthenticated', false),
     user: useStorage('user', null),
     registeredUsers: useStorage('registeredUsers', []),
-    adminList: ['ben@gmail.com']
+    adminList: ['ben@gmail.com', 'ridgesben1864@gmail.com'],
+    isAdmin: useStorage('isAdmin', false)
   },
   mutations: {
     setAuthentication(state, status) {
@@ -17,6 +18,9 @@ export default createStore({
     },
     registerUser(state, user) {
       state.registeredUsers.push(user)
+    },
+    setAdmin(state, isAdmin) {
+      state.isAdmin = isAdmin
     }
   },
   actions: {
@@ -28,6 +32,7 @@ export default createStore({
       if (userFromEmail !== null && userFromEmail.password === userPassword) {
         commit('setAuthentication', true)
         commit('setUser', userFromEmail)
+        commit('setAdmin', getters.userIsAdmin(userFromEmail))
         return true
       }
       return false
@@ -40,6 +45,7 @@ export default createStore({
       //Return true if the user is successfully registered
       if (!getters.userAlreadyRegistered(user)) {
         commit('registerUser', user)
+        commit('setAdmin', getters.userIsAdmin(userFromEmail))
         return true
       }
       return false
@@ -57,7 +63,8 @@ export default createStore({
       return state.registeredUsers.find((user) => user.email === email) || null
     },
     userIsAdmin: (state) => (user) => {
-      return adminList.contains(user.email)
+      //True if users email is in admin list
+      return state.adminList.includes(user.email)
     }
   }
 })
