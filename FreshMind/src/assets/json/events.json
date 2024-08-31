@@ -1,0 +1,54 @@
+[
+    {
+        "id": 1,
+        "title": "Mental Health Awareness Workshop",
+        "description": "A workshop to discuss mental health issues and coping strategies.",
+        "date": "2024-09-15",
+        "time": "10:00 AM",
+        "location": "Community Hall, Melbourne",
+        "organizer": "FreshMind Australia",
+        "attendees": 50,
+        "tags": ["mental health", "workshop", "awareness"],
+        "image": "https://example.com/images/mental-health-workshop.jpg",
+        "status": "Not Attending"
+    },
+    {
+        "id": 2,
+        "title": "Online Therapy Session",
+        "description": "An online session with a licensed therapist.",
+        "date": "2024-09-20",
+        "time": "02:00 PM",
+        "location": "Zoom",
+        "organizer": "FreshMind Australia",
+        "attendees": 30,
+        "tags": ["therapy", "online", "mental health"],
+        "image": "https://example.com/images/online-therapy-session.jpg",
+        "status": "Not Attending"
+      },
+      {
+        "id": 3,
+        "title": "Stress Management Webinar",
+        "description": "A webinar to learn stress management techniques.",
+        "date": "2024-09-25",
+        "time": "01:00 PM",
+        "location": "Online",
+        "organizer": "FreshMind Australia",
+        "attendees": 100,
+        "tags": ["stress management", "webinar", "mental health"],
+        "image": "https://example.com/images/stress-management-webinar.jpg",
+        "status": "Not Attending"
+      },
+      {
+        "id": 4,
+        "title": "Community Support Group Meeting",
+        "description": "A monthly meeting for community support group members.",
+        "date": "2024-10-01",
+        "time": "05:00 PM",
+        "location": "Local Community Center",
+        "organizer": "FreshMind Australia",
+        "attendees": 20,
+        "tags": ["support group", "community", "mental health"],
+        "image": "https://example.com/images/community-support-group.jpg",
+        "status": "Not Attending"
+      }
+]
