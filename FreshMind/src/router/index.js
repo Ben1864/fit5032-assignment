@@ -7,12 +7,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: HomeView
     },
     {
       path: '/about',
-      name: 'about',
+      name: 'About',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -20,13 +20,13 @@ const router = createRouter({
     },
     {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: () => import('../views/LoginView.vue'),
       beforeEnter: (to, from, next) => {
         const isAuthenticated = store.state.isAuthenticated
         if (isAuthenticated) {
           // Redirect to home if trying to access login while already authenticated
-          next({ name: 'home' })
+          next({ name: 'Home' })
         } else {
           next() // Proceed to login page
         }
@@ -34,22 +34,28 @@ const router = createRouter({
     },
     {
       path: '/signup',
-      name: 'signup',
+      name: 'Signup',
       component: () => import('../views/SignUpView.vue')
     },
     {
       path: '/forgot-password',
-      name: 'forgot-password',
+      name: 'ForgotPassword',
       component: () => import('../views/ForgotPasswordView.vue')
     },
     {
       path: '/community-events',
-      name: 'community-events',
+      name: 'CommunityEvents',
       component: () => import('../views/EventsView.vue')
     },
     {
+      path: '/community-events/:id', // Dynamic route with ID parameter
+      name: 'EventInfo',
+      component: () => import('../views/EventInfoView.vue'),
+      props: true // Pass route parameters as props to the component
+    },
+    {
       path: '/add-event',
-      name: 'add-event',
+      name: 'Add-event',
       component: () => import('../views/AddEventView.vue')
     }
   ]
