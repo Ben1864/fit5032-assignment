@@ -1,14 +1,14 @@
 <template>
     <div class="row align-items-center mt-3">
-  <div class="col-12 col-md-6 offset-md-3 text-center order-1 order-md-0">
-    <h1>Community Events</h1>
-  </div>
-  <div v-if="store.state.isAdmin" class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0 order-2 order-md-1">
-    <router-link to="/add-event" active-class="active" aria-current="page">
-      <button type="button" class="responsive-button action-btn btn btn-secondary me-2">Add Event</button>
-    </router-link>
-  </div>
-</div>
+        <div class="col-12 col-md-6 offset-md-3 text-center order-1 order-md-0">
+            <h1>Community Events</h1>
+        </div>
+        <div v-if="store.state.isAdmin" class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0 order-2 order-md-1">
+            <router-link to="/add-event" active-class="active" aria-current="page">
+            <button type="button" class="responsive-button action-btn btn btn-secondary me-2">Add Event</button>
+            </router-link>  
+        </div>
+    </div>
     <div v-if="!store.state.isAuthenticated" class="container">
         <div class="alert alert-danger mt-5 text-center" role="alert">
             Please login to access community events

@@ -105,6 +105,8 @@ import router from '@/router';
                 if(successfulLogin) {
                     router.push({ name: 'Home' })
                 }
+            } else{
+                errors.value.email = 'Email already registered' 
             }
             
         } catch (error) {
@@ -133,8 +135,7 @@ import router from '@/router';
     dob: null,  
     email: null,
     password: null,
-    retypePassword: null,
-    signUp: null
+    retypePassword: null
   })
 
   const validateEmail = (blur) => {

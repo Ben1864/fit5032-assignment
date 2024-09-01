@@ -6,7 +6,7 @@ import LoginForm from '@/components/LoginForm.vue';
 <template>
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-lg-6 col-12 border-end pe-3">
-            <h1 class="text-center">Login with email</h1>
+            <h1 class="text-center">Login with Email</h1>
             <LoginForm></LoginForm>
         </div>
         <div class="col-6">
