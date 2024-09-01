@@ -1,7 +1,7 @@
 Running project:
 
-'''bash
+```bash
 cd FreshMind
 npm install
 npm run dev
-'''
+```
