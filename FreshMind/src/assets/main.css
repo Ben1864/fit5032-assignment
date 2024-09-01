@@ -24,3 +24,24 @@ a,
   height: 100px;
   padding-left: 6%;
 }
+
+.responsive-button {
+  font-size: 1.5rem; /* Default size */
+  padding: 0.75rem 1.5rem; 
+}
+
+@media (max-width: 767px) {
+  .responsive-button {
+    font-size: 20px;
+    padding: 0.5rem 1rem;
+  }
+}
+
+
+h2{
+  font-weight: bold;
+}
+
+h1{
+  font-weight: bolder;
+}
