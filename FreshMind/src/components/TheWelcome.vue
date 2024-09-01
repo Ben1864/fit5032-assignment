@@ -1,12 +1,12 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid yellow-back">
         <div class="row">
-            <div class="col-md-6 yellow-back">
+            <div class="col-md-6">
                 <div class="col-6 offset-3 welcome-text">
-                    <h1 v-if="store.state.isAuthenticated">Welcome, {{ store.state.currentUser.firstName }}!</h1>
-                    <h1 v-else>Welcome!</h1>
+                    <h1 v-if="store.state.isAuthenticated" class="mb-md-2">Welcome, {{ store.state.currentUser.firstName }}!</h1>
+                    <h1 v-else class="mb-md-4">Welcome!</h1>
                 </div>
-                <div class="justify-content-center row col-5 offset-2 mt-5">
+                <div class="justify-content-center row col-5 offset-2">
                     <p>Your Path to Mental Wellness Starts Here</p>
                 </div>
                 <div class="justify-content-center row col-7 offset-2 ">
@@ -51,16 +51,29 @@ p{
 }
 
 .yellow-back {
-    background-color: #FFF4D5; /* Yellow color */
-    height: auto; /* Full viewport height */
+    background-color: #FFF4D5;
+    height: 90vh;
 }
 
+@media (max-width: 767px) {
+  .sub-text{
+    font-size: 2vw;
+  }
+
+  p{
+    font-size: 3vw;
+  }
+
+  h1{
+    font-size: 7vw;
+  }
+}
 .item-container {
-    background-color: #F8F9FA; /* Optional background for the image section */
+    background-color: #F8F9FA;
 }
 
 .img-fluid {
-    width: 100%; /* Ensure the image takes up the full width */
-    height: auto; /* Maintain aspect ratio */
+    width: 100%;
+    height: auto;
 }
 </style>
