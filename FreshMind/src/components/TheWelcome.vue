@@ -1,88 +1,66 @@
+<template>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 yellow-back">
+                <div class="col-6 offset-3 welcome-text">
+                    <h1 v-if="store.state.isAuthenticated">Welcome, {{ store.state.currentUser.firstName }}!</h1>
+                    <h1 v-else>Welcome!</h1>
+                </div>
+                <div class="justify-content-center row col-5 offset-2 mt-5">
+                    <p>Your Path to Mental Wellness Starts Here</p>
+                </div>
+                <div class="justify-content-center row col-7 offset-2 ">
+                    <p class="sub-text">At FreshMind Australia, we are here to support your journey to mental wellness, offering resources and community tailored to your needs. Whether for yourself or a loved one, take the first step today and discover the help you deserve</p>
+                </div>
+                
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center item-container">
+                <img class="img-fluid" src="../assets/images/Media.png" alt="Descriptive text">
+            </div>
+        </div>
+    </div>
+</template>
+
 <script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
+    import store from '@/store/store';
 </script>
 
-<template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
+<style scoped>
+h1 {
+    font-size: 5vw;
+    font-weight: normal;
+}
 
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
+p{
+    font-weight: bold;
+    font-size: 1.5vw;
+}
 
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
+.sub-text{
+    font-weight: normal;
+    font-size: 1.2vw;
+}
 
-    This project is served and bundled with
-    <a href="https://vitejs.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a> +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank" rel="noopener">Volar</a>. If
-    you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> and
-    <a href="https://on.cypress.io/component" target="_blank" rel="noopener"
-      >Cypress Component Testing</a
-    >.
+.welcome-text{
+    margin-top: 3vw;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
 
-    <br />
+.col-md-6 {
+    padding: 0;
+}
 
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
+.yellow-back {
+    background-color: #FFF4D5; /* Yellow color */
+    height: auto; /* Full viewport height */
+}
 
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
+.item-container {
+    background-color: #F8F9FA; /* Optional background for the image section */
+}
 
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
-    Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a> and follow
-    the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
-</template>
+.img-fluid {
+    width: 100%; /* Ensure the image takes up the full width */
+    height: auto; /* Maintain aspect ratio */
+}
+</style>
