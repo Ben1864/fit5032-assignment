@@ -43,11 +43,13 @@
                         class="card m-2"
                         style="width: 18rem"
                     >
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">First Name: {{ review.name }}</li>
-                            <li class="list-group-item">Rating: {{ review.rating }}/5</li>
-                            <li class="list-group-item">Review: {{ review.comment }}</li>
-                        </ul>
+                        <div class="card border-dark" style="max-width: 18rem;">
+                            <div class="card-header">{{ review.rating }}/5</div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ review.name }}</h5>
+                                <p class="card-text">{{ review.comment }}</p>
+                            </div>
+                        </div>
                         
                     </div>
                 </div>
@@ -94,19 +96,23 @@ console.log(store)
   </script>
   
   <style scoped>
-  .action-btn {
-    border-color: #af6050;
-  }
-
-  .list-group-item {
-    margin-bottom: 10px;
-  }
+    .card-body {
+        padding: 0.5rem 1px;
+    }
   
-  .badge-info {
-    background-color: #8E4739;
-  }
+    .action-btn {
+        border-color: #af6050;
+    }
 
-  .alert{
-    --bs-alert-padding-y: 0.25rem
-  }
+    .list-group-item {
+        margin-bottom: 10px;
+    }
+    
+    .badge-info {
+        background-color: #8E4739;
+    }
+
+    .alert{
+        --bs-alert-padding-y: 0.25rem
+    }
   </style>
