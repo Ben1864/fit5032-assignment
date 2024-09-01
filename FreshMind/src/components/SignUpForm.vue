@@ -97,11 +97,17 @@ import router from '@/router';
   
   const submitSignUp= async () => {
       if (validateSignUpData(true)){
-        const user = formData.value;
+        const user = {
+            firstName: formData.value.firstName,
+            lastName: formData.value.lastName,
+            dob: formData.value.dob,  
+            email: formData.value.email,
+            password: formData.value.password
+        };
         try {
-            const successfulRegister = await store.dispatch('register', user);
+            const successfulRegister = await store.dispatch('register', {...user});
             if (successfulRegister) {
-                const successfulLogin = await store.dispatch('login', user);
+                const successfulLogin = await store.dispatch('login', {...user});
                 if(successfulLogin) {
                     router.push({ name: 'Home' })
                 }
