@@ -31,5 +31,6 @@ const logout = () => {
       --bs-btn-bg: red !important;
       --bs-btn-hover-bg: #db0707 !important;
       --bs-btn-active-bg: #bd0606 !important;
+      --bs-btn-border-color: #8a0606 !important;
   }
   </style>
