@@ -4,7 +4,7 @@ import { useStorage } from '@vueuse/core'
 export default createStore({
   state: {
     isAuthenticated: useStorage('isAuthenticated', false),
-    currentUser: useStorage('user', null),
+    currentUser: JSON.parse(useStorage('currentUser', null).value),
     registeredUsers: useStorage('registeredUsers', []),
     adminList: ['ben@gmail.com', 'ridgesben1864@gmail.com'],
     isAdmin: useStorage('isAdmin', false),
@@ -14,8 +14,8 @@ export default createStore({
     setAuthentication(state, status) {
       state.isAuthenticated = status
     },
-    setUser(state, user) {
-      state.currentUser = user
+    setCurrentUser(state, user) {
+      useStorage('currentUser').value = JSON.stringify(user)
     },
     registerUser(state, user) {
       state.registeredUsers.push(user)
@@ -31,14 +31,14 @@ export default createStore({
     }
   },
   actions: {
-    login({ commit, getters }, user) {
+    login({ state, commit, getters }, user) {
       //Return true if user logged in successfully
       const userEmail = user.email
       const userPassword = user.password
       const userFromEmail = getters.getUserByEmail(userEmail)
       if (userFromEmail !== null && userFromEmail.password === userPassword) {
         commit('setAuthentication', true)
-        commit('setUser', userFromEmail)
+        commit('setCurrentUser', userFromEmail)
         commit('setAdmin', getters.userIsAdmin(userFromEmail))
         return true
       }
@@ -46,11 +46,13 @@ export default createStore({
     },
     logout({ commit }) {
       commit('setAuthentication', false)
-      commit('setUser', null)
+      commit('setCurrentUser', null)
       commit('setAdmin', false)
     },
     register({ commit, getters }, user) {
       //Return true if the user is successfully registered
+      const userEmail = user.email
+      const userFromEmail = getters.getUserByEmail(userEmail)
       if (!getters.userAlreadyRegistered(user)) {
         commit('registerUser', user)
         commit('setAdmin', getters.userIsAdmin(userFromEmail))
@@ -75,7 +77,6 @@ export default createStore({
   },
   getters: {
     userAlreadyRegistered: (state) => (user) => {
-      state.registeredUsers = []
       if (state.registeredUsers.length < 1) {
         return false
       }

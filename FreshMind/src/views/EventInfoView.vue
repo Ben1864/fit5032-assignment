@@ -90,7 +90,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .action-btn{
     --bs-btn-bg: #C9A07A;
     --bs-btn-hover-bg: #a5866a;
@@ -136,13 +136,5 @@
     font-size: 20px;
     padding: 0.5rem 1rem;
   }
-}
-
-h2{
-    font-weight: bold;
-}
-
-h1{
-    font-weight: bolder;
 }
 </style>
