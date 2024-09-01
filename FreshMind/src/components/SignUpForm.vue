@@ -82,6 +82,7 @@
   import { checkEmailFormat } from '@/utils/validation';
   import store from '@/store/store';
 import router from '@/router';
+import { encodeInput } from '@/utils/xss';
 
   const formData = ref({
       firstName: '',
@@ -92,18 +93,20 @@ import router from '@/router';
       retypePassword: ''
   });
 
-
+  const encodeForm = () => {
+    return {
+        firstName: encodeInput(formData.value.firstName),
+        lastName: encodeInput(formData.value.lastName),
+        dob: encodeInput(formData.value.dob),  
+        email: encodeInput(formData.value.email),
+        password: encodeInput(formData.value.password)
+    }
+  }
 
   
   const submitSignUp= async () => {
       if (validateSignUpData(true)){
-        const user = {
-            firstName: formData.value.firstName,
-            lastName: formData.value.lastName,
-            dob: formData.value.dob,  
-            email: formData.value.email,
-            password: formData.value.password
-        };
+        const user = encodeForm()
         try {
             const successfulRegister = await store.dispatch('register', {...user});
             if (successfulRegister) {

@@ -41,15 +41,23 @@ import { ref } from 'vue';
 import { checkEmailFormat } from '@/utils/validation';
 import store from '@/store/store';
 import router from '@/router';
+import { encodeInput } from '@/utils/xss';
 
   const formData = ref({
       email: '',
       password: ''
   });
 
+  const encodeForm = () => {
+    return {
+        email: encodeInput(formData.value.email),
+        password: encodeInput(formData.value.password)
+    }
+  }
+
   const submitLogin = async () => {
       if(validateLoginData(true)){
-        const user = formData.value;
+        const user = encodeForm();
         try{
             const successfulLogin = await store.dispatch('login', {...user});
             if (successfulLogin) { 
