@@ -40,13 +40,11 @@ export default createStore({
       if (userFromEmail !== null) {
         try {
           // Compare the provided password with the stored hashed password
-          console.log(passwordInput)
-          console.log(userFromEmail.password)
           const isMatch = await hashPasswordCompare(passwordInput, userFromEmail.password)
           if (isMatch) {
             commit('setAuthentication', true)
             commit('setCurrentUser', userFromEmail)
-            commit('setAdmin', getters.userIsAdmin(userFromEmail))
+            commit('setAdmin', getters.userIsAdmin(userFromEmail.email))
             return true
           }
         } catch (error) {
@@ -63,12 +61,11 @@ export default createStore({
     },
     async register({ commit, getters }, user) {
       //Return true if the user is successfully registered
-      const userEmail = user.email
       if (!getters.userAlreadyRegistered(user)) {
         user.password = await hashPassword(user.password)
-        console.log(user.password)
+        console.log(user.email)
         commit('registerUser', user)
-        commit('setAdmin', getters.userIsAdmin(userEmail))
+        commit('setAdmin', getters.userIsAdmin(user.email))
         return true
       }
       return false
