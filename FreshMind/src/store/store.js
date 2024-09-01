@@ -23,8 +23,11 @@ export default createStore({
     setAdmin(state, isAdmin) {
       state.isAdmin = isAdmin
     },
-    addEvent(state, event) {
-      state.attendingEvents.push(event)
+    addEvent(state, eventId) {
+      state.attendingEvents.push(eventId)
+    },
+    removeEvent(state, eventId) {
+      state.attendingEvents = state.attendingEvents.filter((element) => element != eventId)
     }
   },
   actions: {
@@ -51,6 +54,20 @@ export default createStore({
       if (!getters.userAlreadyRegistered(user)) {
         commit('registerUser', user)
         commit('setAdmin', getters.userIsAdmin(userFromEmail))
+        return true
+      }
+      return false
+    },
+    attendEvent({ commit, getters }, event) {
+      if (!getters.userIsAttending(event)) {
+        commit('addEvent', event.id)
+        return true
+      }
+      return false
+    },
+    unattendEvent({ commit, getters }, event) {
+      if (getters.userIsAttending(event)) {
+        commit('removeEvent', event.id)
         return true
       }
       return false
