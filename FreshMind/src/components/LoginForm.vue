@@ -28,6 +28,7 @@
                     </div>
                     <div class="row mb-3 text-center justify-content-center">
                         <button type="button" class="btn btn-secondary action-btn" @click="submitLogin">Login</button>
+                        <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
                     </div>
                 </form>
             </div>
@@ -51,9 +52,10 @@ import router from '@/router';
         const user = formData.value;
         try{
             const successfulLogin = await store.dispatch('login', user);
-            if (successfulLogin) {
-                console.log("Successful Login")  
-                router.push({ name: 'Home' })
+            if (successfulLogin) { 
+                await router.push({ name: 'Home' })
+            } else {
+                errors.value.login = 'Please sign up before logging in'
             }
         }catch (error) {
             console.error('Error logging in:', error);
@@ -62,7 +64,8 @@ import router from '@/router';
   };
   const errors = ref({
     email: null,
-    password: null
+    password: null,
+    login: null
   })
   const validateEmail = (blur) => {
     // TODO: Validate email exists in database
