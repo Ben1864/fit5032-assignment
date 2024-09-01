@@ -55,21 +55,24 @@ import { encodeInput } from '@/utils/xss';
     }
   }
 
-  const submitLogin = async () => {
-      if(validateLoginData(true)){
-        const user = encodeForm();
-        try{
-            const successfulLogin = await store.dispatch('login', {...user});
-            if (successfulLogin) { 
-                await router.push({ name: 'Home' })
-            } else {
-                errors.value.login = 'Please sign up before logging in'
+    const submitLogin = async () => {
+        errors.value.login = null
+        if(validateLoginData(true)){
+            const user = encodeForm();
+            try{
+                const successfulLogin = await store.dispatch('login', {...user});
+                if (successfulLogin) { 
+                    
+                    await router.push({ name: 'Home' })
+                } else {
+                    errors.value.login = 'Please sign up before logging in'
+                }
+            }catch (error) {
+                console.error('Error logging in:', error);
             }
-        }catch (error) {
-            console.error('Error logging in:', error);
         }
-      }
-  };
+    };
+    
   const errors = ref({
     email: null,
     password: null,
