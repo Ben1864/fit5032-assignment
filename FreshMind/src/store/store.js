@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { useStorage } from '@vueuse/core'
+import { hashPassword, hashPasswordCompare } from '@/utils/hash'
 
 export default createStore({
   state: {
@@ -31,16 +32,27 @@ export default createStore({
     }
   },
   actions: {
-    login({ state, commit, getters }, user) {
-      //Return true if user logged in successfully
-      const userEmail = user.email
-      const userPassword = user.password
-      const userFromEmail = getters.getUserByEmail(userEmail)
-      if (userFromEmail !== null && userFromEmail.password === userPassword) {
-        commit('setAuthentication', true)
-        commit('setCurrentUser', userFromEmail)
-        commit('setAdmin', getters.userIsAdmin(userFromEmail))
-        return true
+    async login({ commit, getters }, user) {
+      // Return true if user logged in successfully
+      const emailInput = user.email
+      const passwordInput = user.password
+      const userFromEmail = getters.getUserByEmail(emailInput)
+      if (userFromEmail !== null) {
+        try {
+          // Compare the provided password with the stored hashed password
+          console.log(passwordInput)
+          console.log(userFromEmail.password)
+          const isMatch = await hashPasswordCompare(passwordInput, userFromEmail.password)
+          if (isMatch) {
+            commit('setAuthentication', true)
+            commit('setCurrentUser', userFromEmail)
+            commit('setAdmin', getters.userIsAdmin(userFromEmail))
+            return true
+          }
+        } catch (error) {
+          console.error('Error comparing passwords:', error)
+          return false
+        }
       }
       return false
     },
@@ -49,13 +61,14 @@ export default createStore({
       commit('setCurrentUser', null)
       commit('setAdmin', false)
     },
-    register({ commit, getters }, user) {
+    async register({ commit, getters }, user) {
       //Return true if the user is successfully registered
       const userEmail = user.email
-      const userFromEmail = getters.getUserByEmail(userEmail)
       if (!getters.userAlreadyRegistered(user)) {
+        user.password = await hashPassword(user.password)
+        console.log(user.password)
         commit('registerUser', user)
-        commit('setAdmin', getters.userIsAdmin(userFromEmail))
+        commit('setAdmin', getters.userIsAdmin(userEmail))
         return true
       }
       return false
@@ -85,9 +98,9 @@ export default createStore({
     getUserByEmail: (state) => (email) => {
       return state.registeredUsers.find((user) => user.email === email) || null
     },
-    userIsAdmin: (state) => (user) => {
+    userIsAdmin: (state) => (userEmail) => {
       //True if users email is in admin list
-      return state.adminList.includes(user.email)
+      return state.adminList.includes(userEmail)
     },
     userIsAttending: (state) => (event) => {
       return state.attendingEvents.includes(event.id)

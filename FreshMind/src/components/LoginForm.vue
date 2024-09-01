@@ -51,7 +51,7 @@ import router from '@/router';
       if(validateLoginData(true)){
         const user = formData.value;
         try{
-            const successfulLogin = await store.dispatch('login', user);
+            const successfulLogin = await store.dispatch('login', {...user});
             if (successfulLogin) { 
                 await router.push({ name: 'Home' })
             } else {
