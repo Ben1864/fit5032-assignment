@@ -7,7 +7,7 @@
                         <div class="col-md-10 offset-md-1">
                             <div class="row mb-5">
                                 <div class="col-12">
-                                    <input type="text" id="firstName" placeholder="First Name" class="form-control login-field"
+                                    <input required type="text" id="firstName" placeholder="First Name" class="form-control login-field"
                                     @blur= "validateFirstName(true)"
                                     @input= "validateFirstName(false)"
                                     v-model="formData.firstName">
@@ -16,7 +16,7 @@
                             </div>
                             <div class="row mb-5">
                                 <div class="col-12">
-                                    <input type="text" id="lastName" placeholder="Last Name" class="form-control login-field" 
+                                    <input required type="text" id="lastName" placeholder="Last Name" class="form-control login-field" 
                                     @blur="validateLastName(true)"
                                     @input="validateLastName(false)"
                                     v-model="formData.lastName">
@@ -25,7 +25,7 @@
                             </div>
                             <div class="row mb-lg-0 mb-5">
                                 <div class="col-12">
-                                    <input type="text" id="dob" placeholder="Date Of Birth" class="form-control login-field"
+                                    <input required type="text" id="dob" placeholder="Date Of Birth" class="form-control login-field"
                                     v-model="formData.dob"
                                     @focus="(e) => e.target.type = 'date'"
                                     @blur="(e) => {e.target.type = 'text'; validateDOB(true)}"
@@ -41,7 +41,7 @@
                         <div class="col-md-10 offset-md-1">
                             <div class="row mb-5">
                                 <div class="col-12">
-                                    <input type="text" id="email" placeholder="Email" class="form-control login-field"
+                                    <input required type="text" id="email" placeholder="Email" class="form-control login-field"
                                     @blur= "validateEmail(true)"
                                     @input= "validateEmail(false)"
                                     v-model="formData.email">
@@ -50,7 +50,7 @@
                             </div>
                             <div class="row mb-5">
                                 <div class="col-12">
-                                    <input type="password" id="password" placeholder="Password" class="form-control login-field" 
+                                    <input required type="password" id="password" placeholder="Password" class="form-control login-field" 
                                     @blur="validatePassword(true)"
                                     @input="validatePassword(false)"
                                     v-model="formData.password">
@@ -59,7 +59,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <input type="password" id="retypePassword" placeholder="Retype Password" class="form-control login-field" 
+                                    <input required type="password" id="retypePassword" placeholder="Retype Password" class="form-control login-field" 
                                     @blur="validateRetypePassword(true)"
                                     @input="validateRetypePassword(false)"
                                     v-model="formData.retypePassword">
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="row p-5 text-center justify-content-center">
-                <button type="button" class="btn btn-secondary login-submit" @click="submitSignUp">Sign Up</button>
+                <button type="button" class="btn btn-secondary action-btn" @click="submitSignUp">Sign Up</button>
             </div>
         </form>
     </div>
@@ -103,7 +103,7 @@ import router from '@/router';
             if (successfulRegister) {
                 const successfulLogin = await store.dispatch('login', user);
                 if(successfulLogin) {
-                    router.push({ name: 'home' })
+                    router.push({ name: 'Home' })
                 }
             }
             
@@ -221,13 +221,3 @@ import router from '@/router';
     validateRetypePassword(blur);
   }
 </script>
-
-<style>
-    .login-submit{
-  --bs-btn-bg: #8E4739;
-  font-size: 32px;
-  width: 40%;
-  --bs-btn-hover-bg: #8a5e55;
-  --bs-btn-active-bg: #4f2e27;
-}
-</style>

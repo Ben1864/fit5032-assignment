@@ -4,7 +4,7 @@
         <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
             <div class="logo-position">
                 <router-link to="/" active-class="active" aria-current="page" class="col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none">
-                    <img class="bi me-2" height="50" width="190" src="../assets/freshmind-logo.png"></img>
+                    <img class="bi me-2" height="50" width="190" src="../assets/images/freshmind-logo.png"></img>
                 </router-link>
             </div>
             <div class="d-flex align-items-center">
@@ -16,7 +16,7 @@
                         </router-link>
                     </div>
                     <div v-else>
-                        <button type="button"  class="login-btn btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</button>
+                        <button type="button"  class="login-btn btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
                     <li><router-link to="/" class="dropdown-item">Volunteering</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Community Events</router-link></li>
+                    <li><router-link to="/community-events" class="dropdown-item">Community Events</router-link></li>
                     <li v-if="store.state.isAdmin == true"><router-link to="/" class="dropdown-item">Dashboard</router-link></li>
                 </ul>
             </div>
@@ -58,7 +58,7 @@
                     About
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">About Us</router-link></li>
+                    <li><router-link to="/about" class="dropdown-item">About Us</router-link></li>
                     <li><router-link to="/" class="dropdown-item">Contact Us</router-link></li>
                     <li><router-link to="/" class="dropdown-item">Reviews</router-link></li>
                 </ul>
