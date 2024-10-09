@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import { hashPassword, hashPasswordCompare } from '@/utils/hash'
 import { auth, db } from '@/firebase/init'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { setDoc, doc } from 'firebase/firestore'
+import { setDoc, getDoc, doc } from 'firebase/firestore'
 
 export default createStore({
   state: {
@@ -27,7 +27,7 @@ export default createStore({
       state.attendingEvents = state.attendingEvents.filter((element) => element != eventId)
     },
     setUserData(state, userData) {
-      useStorage('currentUser').value = JSON.stringify(user)
+      useStorage('currentUser').value = JSON.stringify(userData)
     }
   },
   actions: {
@@ -36,10 +36,10 @@ export default createStore({
       const emailInput = user.email
       const passwordInput = user.password
       try {
-        await signInWithEmailAndPassword(emailInput, passwordInput)
+        await signInWithEmailAndPassword(auth, emailInput, passwordInput)
         await dispatch('getUserData', user)
         commit('setAuthentication', true)
-        commit('setAdmin', getters.userIsAdmin(userFromEmail.email))
+        commit('setAdmin', getters.userIsAdmin(emailInput))
         return true
       } catch (error) {
         console.error('Error Logging in User: ', error)
@@ -48,6 +48,7 @@ export default createStore({
     },
     logout({ commit }) {
       signOut(auth)
+      commit('setUserData', null)
       commit('setAuthentication', false)
       commit('setAdmin', false)
     },
@@ -84,15 +85,13 @@ export default createStore({
         const userDocRef = doc(db, 'users', auth.currentUser.uid)
         const userDoc = await getDoc(userDocRef)
         if (userDoc.exists()) {
-          console.log('User data fetched successfully:', userDoc.data());
-          commit('setUserData', userDoc.data())
+          console.log('User data fetched successfully: ', userDoc.data());
+          await commit('setUserData', userDoc.data())
         } else {
           console.log('No such user document!');
-          userData = null; 
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
-        userData = null;
       }
 
     },
