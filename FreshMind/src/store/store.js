@@ -3,7 +3,7 @@ import { useStorage } from '@vueuse/core'
 import { hashPassword, hashPasswordCompare } from '@/utils/hash'
 import { auth, db } from '@/firebase/init'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { setDoc, getDoc, doc } from 'firebase/firestore'
+import { setDoc, getDoc, doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 export default createStore({
   state: {
@@ -20,11 +20,14 @@ export default createStore({
     setAdmin(state, isAdmin) {
       state.isAdmin = isAdmin
     },
-    addEvent(state, eventId) {
+    attendingEvent(state, eventId) {
       state.attendingEvents.push(eventId)
     },
-    removeEvent(state, eventId) {
+    removeAttendingEvent(state, eventId) {
       state.attendingEvents = state.attendingEvents.filter((element) => element != eventId)
+    },
+    removeAllAttendingEvents(state){
+      state.attendingEvents = []
     },
     setUserData(state, userData) {
       useStorage('currentUser').value = JSON.stringify(userData)
@@ -40,6 +43,7 @@ export default createStore({
         await dispatch('getUserData', user)
         commit('setAuthentication', true)
         commit('setAdmin', getters.userIsAdmin(emailInput))
+
         return true
       } catch (error) {
         console.error('Error Logging in User: ', error)
@@ -51,6 +55,8 @@ export default createStore({
       commit('setUserData', null)
       commit('setAuthentication', false)
       commit('setAdmin', false)
+      commit('removeAllAttendingEvents');
+
     },
     async register({ commit, getters, dispatch}, user) {
       //Return true if the user is successfully registered
@@ -87,6 +93,14 @@ export default createStore({
         if (userDoc.exists()) {
           console.log('User data fetched successfully: ', userDoc.data());
           await commit('setUserData', userDoc.data())
+          if (userDoc.data().attendingEvents){
+            const attendingEvents = userDoc.data().attendingEvents;
+
+            // Loop through each event and commit it to the Vuex store
+            attendingEvents.forEach(event => {
+              commit('attendingEvent', event);
+            });
+          }
         } else {
           console.log('No such user document!');
         }
@@ -95,19 +109,42 @@ export default createStore({
       }
 
     },
-    attendEvent({ commit, getters }, event) {
-      if (!getters.userIsAttending(event)) {
-        commit('addEvent', event.id)
-        return true
+    async attendEvent({ commit, getters }, event) {
+      try{
+        if (!getters.userIsAttending(event)) {
+          commit('attendingEvent', event.id)
+          // Reference to the user's document in Firestore
+          const userRef = doc(db, 'users', auth.currentUser.uid);
+
+          // Update the user's document by adding the event to attendingEvents array
+          await updateDoc(userRef, {
+            attendingEvents: arrayUnion(event.id)
+          });
+          
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error("Error adding event to user: ", error);
       }
-      return false
     },
-    unattendEvent({ commit, getters }, event) {
-      if (getters.userIsAttending(event)) {
-        commit('removeEvent', event.id)
-        return true
+    async unattendEvent({ commit, getters }, event) {
+      try{
+        if (getters.userIsAttending(event)) {
+          commit('removeAttendingEvent', event.id)
+          // Reference to the user's document in Firestore
+          const userRef = doc(db, 'users', auth.currentUser.uid);
+
+          // Update the user's document by adding the event to attendingEvents array
+          await updateDoc(userRef, {
+            attendingEvents: arrayRemove(event.id)
+          });
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error("Error adding event to user: ", error);
       }
-      return false
     }
   },
   getters: {
@@ -118,7 +155,7 @@ export default createStore({
       //True if users email is in admin list
       return state.adminList.includes(userEmail)
     },
-    userIsAttending: (state) => (event) => {
+    userIsAttending: (state) => (event) =>{
       return state.attendingEvents.includes(event.id)
     }
   }
