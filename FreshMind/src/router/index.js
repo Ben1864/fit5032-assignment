@@ -38,11 +38,6 @@ const router = createRouter({
       component: () => import('../views/SignUpView.vue')
     },
     {
-      path: '/forgot-password',
-      name: 'ForgotPassword',
-      component: () => import('../views/ForgotPasswordView.vue')
-    },
-    {
       path: '/community-events',
       name: 'CommunityEvents',
       component: () => import('../views/CommunityEventsView.vue')

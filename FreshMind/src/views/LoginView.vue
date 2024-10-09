@@ -4,8 +4,8 @@ import LoginForm from '@/components/LoginForm.vue';
 
 
 <template>
-    <div class="row justify-content-center align-items-center" style="height: 80vh;">
-        <div class="col-12 pe-3">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 pe-3 mt-2">
             <h1 class="text-center">Login with Email</h1>
             <LoginForm></LoginForm>
         </div>
