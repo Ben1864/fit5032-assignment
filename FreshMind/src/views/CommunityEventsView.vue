@@ -15,7 +15,7 @@
         </div>
     </div>
     <div v-else class="row mt-5 medium-text">
-        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" tableStyle="min-width: 50rem">
+        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" tableStyle="min-width: 20rem">
             <Column field="title" sortable header="Event Title">
                 <template #body="{ data }">
                     {{ data.title }}
@@ -35,7 +35,11 @@
             <Column field="date" sortable header="Date">
                 <template #body="slotProps">
                     {{ formatDate(slotProps.data.date) }}
-                </template></Column>
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by date" />
+                </template>
+            </Column>
             <Column header="More Info">
                 <template #body="slotProps">
                     <router-link :to="`/community-events/${slotProps.data.id}`" active-class="active" aria-current="page">
@@ -45,10 +49,14 @@
             </Column>
             <Column field="status" sortable header="Status">
                 <template #body="{ data }">
-                    {{ data.status }}
+                    <Tag :value="data.status" :severity="getStatus(data.status)" />
                 </template>
                 <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by status" />
+                    <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"  :showClear="true">
+                        <template #option="slotProps">
+                            <Tag :value="slotProps.option" :severity="getStatus(slotProps.option)" />
+                        </template>
+                    </Select>
                 </template></Column>
         </DataTable>
     </div>
@@ -58,6 +66,8 @@
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import InputText from 'primevue/inputtext';
+    import Tag from 'primevue/tag';
+    import Select from 'primevue/select';
     import { FilterMatchMode } from '@primevue/core/api';
     import createdEvents from '../assets/json/events.json';
     import { useStore } from 'vuex'
@@ -65,6 +75,7 @@
 
     const store = useStore()
 
+    const statuses = ref(['Attending', 'Not Attending'])
     createdEvents.forEach(element => {
         if (store.getters.userIsAttending(element)){
             element.status = 'Attending'
@@ -76,14 +87,23 @@
     const filters = ref({
         title: { value: null, matchMode: FilterMatchMode.CONTAINS },
         location: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        date: { value:null, matchMode: FilterMatchMode.DATE_AFTER },
-        status:{ value:null, matchMode: FilterMatchMode.STARTS_WITH} 
+        date: { value:null, matchMode: FilterMatchMode.CONTAINS },
+        status:{ value:null, matchMode: FilterMatchMode.EQUALS} 
     })
 
     function formatDate(date) {
       return new Date(date).toLocaleDateString(); // Customize the date format as needed
     }
 
+    function getStatus(status) {
+        console.log(status)
+        switch(status) {
+            case "Attending":
+                return 'success';
+            case "Not Attending":
+                return 'danger'
+        }
+    }
 </script>
 
 <style scoped>
