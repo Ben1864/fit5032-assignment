@@ -40,8 +40,8 @@
 import { ref } from 'vue';
 import { checkEmailFormat } from '@/utils/validation';
 import store from '@/store/store';
-import router from '@/router';
 import { encodeInput } from '@/utils/xss';
+import { useRouter } from 'vue-router';
 
   const formData = ref({
       email: '',
@@ -55,6 +55,7 @@ import { encodeInput } from '@/utils/xss';
     }
   }
 
+    const router = useRouter()
     const submitLogin = async () => {
         errors.value.login = null
         if(validateLoginData(true)){
