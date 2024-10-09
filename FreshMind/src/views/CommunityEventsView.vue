@@ -15,10 +15,27 @@
         </div>
     </div>
     <div v-else class="row mt-5 medium-text">
-        <DataTable :value="createdEvents" tableStyle="min-width: 50rem">
-            <Column field="title" header="Event Title"></Column>
-            <Column field="location" header="Location"></Column>
-            <Column field="date" header="Date"></Column>
+        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" tableStyle="min-width: 50rem">
+            <Column field="title" sortable header="Event Title">
+                <template #body="{ data }">
+                    {{ data.title }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by title" />
+                </template>
+            </Column>
+            <Column field="location" sortable header="Location">
+                <template #body="{ data }">
+                    {{ data.location }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by location" />
+                </template>
+            </Column>
+            <Column field="date" sortable header="Date">
+                <template #body="slotProps">
+                    {{ formatDate(slotProps.data.date) }}
+                </template></Column>
             <Column header="More Info">
                 <template #body="slotProps">
                     <router-link :to="`/community-events/${slotProps.data.id}`" active-class="active" aria-current="page">
@@ -26,7 +43,13 @@
                     </router-link>
                 </template>
             </Column>
-            <Column field="status" header="Status"></Column>
+            <Column field="status" sortable header="Status">
+                <template #body="{ data }">
+                    {{ data.status }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by status" />
+                </template></Column>
         </DataTable>
     </div>
   </template>
@@ -34,8 +57,11 @@
 <script setup>
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
+    import InputText from 'primevue/inputtext';
+    import { FilterMatchMode } from '@primevue/core/api';
     import createdEvents from '../assets/json/events.json';
     import { useStore } from 'vuex'
+    import { ref } from 'vue';
 
     const store = useStore()
 
@@ -46,6 +72,17 @@
             element.status = 'Not Attending'
         }
     });
+
+    const filters = ref({
+        title: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        location: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        date: { value:null, matchMode: FilterMatchMode.DATE_AFTER },
+        status:{ value:null, matchMode: FilterMatchMode.STARTS_WITH} 
+    })
+
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString(); // Customize the date format as needed
+    }
 
 </script>
 
@@ -62,7 +99,7 @@
 
 .responsive-button {
   font-size: 1.5rem; /* Default size */
-  padding: 0.75rem 1.5rem; 
+  padding: 0.25rem 0.75rem; 
 }
 
 @media (max-width: 767px) {
