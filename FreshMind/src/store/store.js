@@ -1,9 +1,11 @@
 import { createStore } from 'vuex'
 import { useStorage } from '@vueuse/core'
 import { hashPassword, hashPasswordCompare } from '@/utils/hash'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 export default createStore({
   state: {
+    firebaseAuth: getAuth(),
     isAuthenticated: useStorage('isAuthenticated', false),
     currentUser: JSON.parse(useStorage('currentUser', null).value),
     registeredUsers: useStorage('registeredUsers', []),
@@ -61,6 +63,7 @@ export default createStore({
     },
     async register({ commit, getters }, user) {
       //Return true if the user is successfully registered
+
       if (!getters.userAlreadyRegistered(user)) {
         user.password = await hashPassword(user.password)
         console.log(user.email)
