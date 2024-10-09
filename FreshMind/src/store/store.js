@@ -1,27 +1,21 @@
 import { createStore } from 'vuex'
 import { useStorage } from '@vueuse/core'
 import { hashPassword, hashPasswordCompare } from '@/utils/hash'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from '@/firebase/init'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { setDoc, doc } from 'firebase/firestore'
 
 export default createStore({
   state: {
-    firebaseAuth: getAuth(),
     isAuthenticated: useStorage('isAuthenticated', false),
-    currentUser: JSON.parse(useStorage('currentUser', null).value),
-    registeredUsers: useStorage('registeredUsers', []),
     adminList: ['ben@gmail.com', 'ridgesben1864@gmail.com'],
     isAdmin: useStorage('isAdmin', false),
-    attendingEvents: useStorage('attendingEvents', [])
+    attendingEvents: useStorage('attendingEvents', []),
+    userData: JSON.parse(useStorage('currentUser', null).value)
   },
   mutations: {
     setAuthentication(state, status) {
       state.isAuthenticated = status
-    },
-    setCurrentUser(state, user) {
-      useStorage('currentUser').value = JSON.stringify(user)
-    },
-    registerUser(state, user) {
-      state.registeredUsers.push(user)
     },
     setAdmin(state, isAdmin) {
       state.isAdmin = isAdmin
@@ -31,47 +25,76 @@ export default createStore({
     },
     removeEvent(state, eventId) {
       state.attendingEvents = state.attendingEvents.filter((element) => element != eventId)
+    },
+    setUserData(state, userData) {
+      useStorage('currentUser').value = JSON.stringify(user)
     }
   },
   actions: {
-    async login({ commit, getters }, user) {
+    async login({ commit, getters, dispatch }, user) {
       // Return true if user logged in successfully
       const emailInput = user.email
       const passwordInput = user.password
-      const userFromEmail = getters.getUserByEmail(emailInput)
-      if (userFromEmail !== null) {
-        try {
-          // Compare the provided password with the stored hashed password
-          const isMatch = await hashPasswordCompare(passwordInput, userFromEmail.password)
-          if (isMatch) {
-            commit('setAuthentication', true)
-            commit('setCurrentUser', userFromEmail)
-            commit('setAdmin', getters.userIsAdmin(userFromEmail.email))
-            return true
-          }
-        } catch (error) {
-          console.error('Error comparing passwords:', error)
-          return false
-        }
+      try {
+        await signInWithEmailAndPassword(emailInput, passwordInput)
+        await dispatch('getUserData', user)
+        commit('setAuthentication', true)
+        commit('setAdmin', getters.userIsAdmin(userFromEmail.email))
+        return true
+      } catch (error) {
+        console.error('Error Logging in User: ', error)
+        return false
       }
-      return false
     },
     logout({ commit }) {
+      signOut(auth)
       commit('setAuthentication', false)
-      commit('setCurrentUser', null)
       commit('setAdmin', false)
     },
-    async register({ commit, getters }, user) {
+    async register({ commit, getters, dispatch}, user) {
       //Return true if the user is successfully registered
-
-      if (!getters.userAlreadyRegistered(user)) {
-        user.password = await hashPassword(user.password)
-        console.log(user.email)
-        commit('registerUser', user)
+      try{
+        await createUserWithEmailAndPassword(auth, user.email, user.password)
+        await dispatch('createUserData', user)
         commit('setAdmin', getters.userIsAdmin(user.email))
+        commit('setAuthentication', true)
         return true
+      }catch (error){
+        console.log("Error creating user: ", error)
+        return false
       }
-      return false
+    },
+    async createUserData({ commit }, user){
+      try{
+        let userData = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dob: user.dob,
+            email: user.email
+        }
+        await setDoc(doc(db, 'users', auth.currentUser.uid), userData)
+        commit('setUserData', userData)
+        console.log("User Successfully stored")
+      } catch (error) {
+        console.log("Error creating user data: ", error)
+      }
+    },
+    async getUserData({ commit }, user){
+      try{
+        const userDocRef = doc(db, 'users', auth.currentUser.uid)
+        const userDoc = await getDoc(userDocRef)
+        if (userDoc.exists()) {
+          console.log('User data fetched successfully:', userDoc.data());
+          commit('setUserData', userDoc.data())
+        } else {
+          console.log('No such user document!');
+          userData = null; 
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        userData = null;
+      }
+
     },
     attendEvent({ commit, getters }, event) {
       if (!getters.userIsAttending(event)) {
@@ -89,12 +112,6 @@ export default createStore({
     }
   },
   getters: {
-    userAlreadyRegistered: (state) => (user) => {
-      if (state.registeredUsers.length < 1) {
-        return false
-      }
-      return state.registeredUsers.some((registeredUser) => registeredUser.email === user.email)
-    },
     getUserByEmail: (state) => (email) => {
       return state.registeredUsers.find((user) => user.email === email) || null
     },
