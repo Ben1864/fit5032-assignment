@@ -91,9 +91,9 @@ console.log(store)
 
     const submitReview = () => {
         review.value.rating = encodeInput(review.value.rating)
-        review.value.name = encodeInput(review.value.name)
+        review.value.comment = encodeInput(review.value.comment)
         review.value.rating = parseInt(review.value.rating[0])
-        review.value.name = store.state.currentUser.firstName
+        review.value.name = store.state.userData.firstName
         showThankYou.value = true
 
         reviews.value.push({...review.value})

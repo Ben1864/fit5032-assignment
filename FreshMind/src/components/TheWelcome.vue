@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="col-6 offset-3 welcome-text">
-                    <h1 v-if="store.state.isAuthenticated" class="mb-md-2">Welcome, {{ store.state.currentUser.firstName }}!</h1>
+                    <h1 v-if="store.state.isAuthenticated" class="mb-md-2">Welcome, {{ store.state.userData.firstName }}!</h1>
                     <h1 v-else class="mb-md-4">Welcome!</h1>
                 </div>
                 <div class="justify-content-center row col-5 offset-2">
@@ -23,6 +23,8 @@
 
 <script setup>
     import store from '@/store/store';
+
+    console.log(store.state.userData)
 </script>
 
 <style scoped>

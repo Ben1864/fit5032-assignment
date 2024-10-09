@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-5">
+    <div class="container mt-4">
         <div class="row">
             <div class="col-md-10 offset-md-1">
                 <form @submit.prevent="submitForm">
@@ -12,18 +12,13 @@
                             <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
                         </div>
                     </div>
-                    <div class="row mb-8">
+                    <div class="row mb-3">
                         <div class="col-12">
                             <input required type="password" id="password" placeholder="Password" class="form-control login-field" 
                             @blur="validatePassword(true)"
                             @input="validatePassword(false)"
                             v-model="formData.password">
                             <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
-                        </div>
-                    </div>
-                    <div class="row mb-5">
-                        <div class="col-12 text-end">
-                            <router-link to="/forgot-password" class="forgot-password text-muted">Forgot Password?</router-link>
                         </div>
                     </div>
                     <div class="row mb-3 text-center justify-content-center">
