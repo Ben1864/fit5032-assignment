@@ -1,11 +1,12 @@
 <template>
     <div class="container">
         <div class="row text-center align-items-center mt-3">
-            <h1>Leave a Review</h1>
+            <h1>Leave a Website Review</h1>
+            <p>Please let us know about how we can improve the website</p>
         </div>
         <div v-if="!store.state.isAuthenticated" class="row">
             <div class="alert alert-danger mt-5 text-center" role="alert">
-                Please login to leave a review
+                Please login to leave a website review
             </div>
         </div>
         <div v-else class="row">
@@ -59,7 +60,8 @@
 </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { encodeInput } from '@/utils/xss';
+import { ref } from 'vue';
   import { useStore } from 'vuex';
 
   const store = useStore()
@@ -88,9 +90,12 @@ console.log(store)
     }
 
     const submitReview = () => {
+        review.value.rating = encodeInput(review.value.rating)
+        review.value.name = encodeInput(review.value.name)
         review.value.rating = parseInt(review.value.rating[0])
         review.value.name = store.state.currentUser.firstName
         showThankYou.value = true
+
         reviews.value.push({...review.value})
     }  
   </script>
