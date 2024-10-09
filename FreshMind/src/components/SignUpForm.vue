@@ -81,9 +81,9 @@
   import { ref } from 'vue';
   import { checkEmailFormat } from '@/utils/validation';
   import store from '@/store/store';
-import router from '@/router';
 import { encodeInput } from '@/utils/xss';
-
+import { useRouter } from 'vue-router';
+const router = useRouter()
   const formData = ref({
       firstName: '',
       lastName: '',
@@ -110,10 +110,7 @@ import { encodeInput } from '@/utils/xss';
         try {
             const successfulRegister = await store.dispatch('register', {...user});
             if (successfulRegister) {
-                const successfulLogin = await store.dispatch('login', {...user});
-                if(successfulLogin) {
-                    router.push({ name: 'Home' })
-                }
+                router.push({ name: 'Home' })
             } else{
                 errors.value.email = 'Email already registered' 
             }
