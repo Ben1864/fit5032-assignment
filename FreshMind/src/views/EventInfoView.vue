@@ -1,9 +1,6 @@
 <template>
         <div class="row" style="height: 80vh;">
-            <div class="col-lg-5 offset-lg-1 col-12 d-flex pe-3 item-container align-items-center">
-                <img :src="currentEvent.image" class="img-fluid fill-area"></img>
-            </div>
-            <div class="col-lg-6 col-12 mt-2">
+            <div class="col-8 offset-2 mt-2">
                 <div class="row justify-content-center">
                     <div class="col-7"><h1>{{ currentEvent.title }}</h1></div>
                     <div v-if="!store.getters.userIsAttending(currentEvent)" class="col-5"><button type="button" @click="submitAttendance()" class="responsive-button action-btn btn btn-secondary">Attend</button></div>
