@@ -15,10 +15,31 @@
         </div>
     </div>
     <div v-else class="row mt-5 medium-text">
-        <DataTable :value="createdEvents" tableStyle="min-width: 50rem">
-            <Column field="title" header="Event Title"></Column>
-            <Column field="location" header="Location"></Column>
-            <Column field="date" header="Date"></Column>
+        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" tableStyle="min-width: 20rem">
+            <Column field="title" sortable header="Event Title">
+                <template #body="{ data }">
+                    {{ data.title }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by title" />
+                </template>
+            </Column>
+            <Column field="location" sortable header="Location">
+                <template #body="{ data }">
+                    {{ data.location }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by location" />
+                </template>
+            </Column>
+            <Column field="date" sortable header="Date">
+                <template #body="slotProps">
+                    {{ formatDate(slotProps.data.date) }}
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by date" />
+                </template>
+            </Column>
             <Column header="More Info">
                 <template #body="slotProps">
                     <router-link :to="`/community-events/${slotProps.data.id}`" active-class="active" aria-current="page">
@@ -26,27 +47,123 @@
                     </router-link>
                 </template>
             </Column>
-            <Column field="status" header="Status"></Column>
+            <Column field="status" sortable header="Status">
+                <template #body="{ data }">
+                    <Tag :value="data.status" :severity="getStatus(data.status)" />
+                </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"  :showClear="true">
+                        <template #option="slotProps">
+                            <Tag :value="slotProps.option" :severity="getStatus(slotProps.option)" />
+                        </template>
+                    </Select>
+                </template></Column>
         </DataTable>
     </div>
   </template>
   
-<script setup>
+<script>
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
+    import InputText from 'primevue/inputtext';
+    import Tag from 'primevue/tag';
+    import Select from 'primevue/select';
+    import { FilterMatchMode } from '@primevue/core/api';
     import createdEvents from '../assets/json/events.json';
     import { useStore } from 'vuex'
+    import { ref, onMounted } from 'vue';
+    import { db, auth } from '@/firebase/init';
+    import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 
-    const store = useStore()
+    export default {
+        components: {
+            InputText,
+            Column,
+            DataTable,
+            Tag,
+            Select
+        },
+        setup() {
+            const store = useStore()
+            const createdEvents = ref([])
 
-    createdEvents.forEach(element => {
-        if (store.getters.userIsAttending(element)){
-            element.status = 'Attending'
-        }else {
-            element.status = 'Not Attending'
-        }
-    });
+            const statuses = ref(['Attending', 'Not Attending'])
 
+            const filters = ref({
+                title: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                location: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                date: { value:null, matchMode: FilterMatchMode.CONTAINS },
+                status:{ value:null, matchMode: FilterMatchMode.EQUALS} 
+            })
+
+            function formatDate(date) {
+                return new Date(date).toLocaleDateString(); // Customize the date format as needed
+            }
+
+            function getStatusTag(status) {
+                switch(status) {
+                    case "Attending":
+                        return 'success';
+                    case "Not Attending":
+                        return 'danger'
+                }
+            }
+            const getStatus = async (docId) => {
+                try {
+                    // Reference to the user's document in Firestore
+                    const userDocRef = doc(db, 'users', auth.currentUser.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        // Check if attendingEvents exists and contains the event ID
+                        if (userData.attendingEvents && userData.attendingEvents.includes(docId)) {
+                            return 'Attending'; // Event is in attendingEvents
+                        }else {
+                            return 'Not Attending'; // Event is not in attendingEvents
+                        }
+                    }   else {
+                        console.log('No user document found!');
+                        return 'Not Attending';
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return 'Not Attending';
+                }
+            }
+
+            const getEvents = async () => {
+                try {
+                    const eventsCollection = collection(db, 'events');
+                    const eventsSnapshot = await getDocs(eventsCollection);
+                    const eventsArray = [];
+                    for (const doc of eventsSnapshot.docs) {
+                        const eventData = { id: doc.id, ...doc.data() };
+                        const eventStatus = await getStatus(doc.id); // Await the async status fetch
+                        eventData.status = eventStatus; // Add status to the event data
+                        eventsArray.push(eventData); // Push the updated event data into the array
+                    }
+                    createdEvents.value = eventsArray; // Update the reactive `createdEvents` variable
+                } catch (error) {
+                    console.error('Error fetching events:', error);
+                }
+            }
+
+            onMounted(() => {
+                getEvents();
+            });
+
+            return {
+                createdEvents,
+                getEvents,
+                getStatus: getStatusTag,
+                formatDate,
+                filters,
+                statuses,
+                store
+            };
+        },
+    }
 </script>
 
 <style scoped>
@@ -62,7 +179,7 @@
 
 .responsive-button {
   font-size: 1.5rem; /* Default size */
-  padding: 0.75rem 1.5rem; 
+  padding: 0.25rem 0.75rem; 
 }
 
 @media (max-width: 767px) {
