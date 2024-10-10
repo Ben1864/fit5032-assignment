@@ -8,9 +8,7 @@
         "finishTime": "11:00 AM",
         "location": "Community Hall, Melbourne",
         "organiser": "FreshMind Australia",
-        "attendees": 50,
         "tags": ["mental health", "workshop", "awareness"],
-        "image": "/src/assets/images/Mindfulness_workshop.jpeg",
         "status": null,
         "contact": {
             "email": "info@freshmindaustralia.org",
@@ -26,9 +24,7 @@
         "finishTime": "04:00 PM",
         "location": "Zoom",
         "organiser": "FreshMind Australia",
-        "attendees": 30,
         "tags": ["therapy", "online", "mental health"],
-        "image": "/src/assets/images/Online-Therapy.jpg",
         "status": null,
         "contact": {
             "email": "support@freshmindaustralia.org",
@@ -44,9 +40,7 @@
         "finishTime": "03:00 PM",
         "location": "Online",
         "organiser": "FreshMind Australia",
-        "attendees": 100,
         "tags": ["stress management", "webinar", "mental health"],
-        "image": "/src/assets/images/Stress-Management.webp",
         "status": null,
         "contact": {
             "email": "info@freshmindaustralia.org",
@@ -62,9 +56,7 @@
         "finishTime": "05:30 PM",
         "location": "Local Community Center",
         "organiser": "FreshMind Australia",
-        "attendees": 20,
         "tags": ["support group", "community", "mental health"],
-        "image": "/src/assets/images/Group Meeting.webp",
         "status": null,
         "contact": {
             "email": "contact@freshmindaustralia.org",
