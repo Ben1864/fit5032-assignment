@@ -62,7 +62,7 @@
     </div>
   </template>
   
-<script setup>
+<script>
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import InputText from 'primevue/inputtext';
@@ -71,38 +71,98 @@
     import { FilterMatchMode } from '@primevue/core/api';
     import createdEvents from '../assets/json/events.json';
     import { useStore } from 'vuex'
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
+    import { db, auth } from '@/firebase/init';
+    import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 
-    const store = useStore()
+    export default {
+        components: {
+            InputText,
+            Column,
+            DataTable,
+            Tag,
+            Select
+        },
+        setup() {
+            const store = useStore()
+            const createdEvents = ref([])
 
-    const statuses = ref(['Attending', 'Not Attending'])
-    createdEvents.forEach(element => {
-        if (store.getters.userIsAttending(element)){
-            element.status = 'Attending'
-        }else {
-            element.status = 'Not Attending'
-        }
-    });
+            const statuses = ref(['Attending', 'Not Attending'])
 
-    const filters = ref({
-        title: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        location: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        date: { value:null, matchMode: FilterMatchMode.CONTAINS },
-        status:{ value:null, matchMode: FilterMatchMode.EQUALS} 
-    })
+            const filters = ref({
+                title: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                location: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                date: { value:null, matchMode: FilterMatchMode.CONTAINS },
+                status:{ value:null, matchMode: FilterMatchMode.EQUALS} 
+            })
 
-    function formatDate(date) {
-      return new Date(date).toLocaleDateString(); // Customize the date format as needed
-    }
+            function formatDate(date) {
+                return new Date(date).toLocaleDateString(); // Customize the date format as needed
+            }
 
-    function getStatus(status) {
-        console.log(status)
-        switch(status) {
-            case "Attending":
-                return 'success';
-            case "Not Attending":
-                return 'danger'
-        }
+            function getStatusTag(status) {
+                switch(status) {
+                    case "Attending":
+                        return 'success';
+                    case "Not Attending":
+                        return 'danger'
+                }
+            }
+            const getStatus = async (docId) => {
+                try {
+                    // Reference to the user's document in Firestore
+                    const userDocRef = doc(db, 'users', auth.currentUser.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        // Check if attendingEvents exists and contains the event ID
+                        if (userData.attendingEvents && userData.attendingEvents.includes(docId)) {
+                            return 'Attending'; // Event is in attendingEvents
+                        }else {
+                            return 'Not Attending'; // Event is not in attendingEvents
+                        }
+                    }   else {
+                        console.log('No user document found!');
+                        return 'Not Attending';
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return 'Not Attending';
+                }
+            }
+
+            const getEvents = async () => {
+                try {
+                    const eventsCollection = collection(db, 'events');
+                    const eventsSnapshot = await getDocs(eventsCollection);
+                    const eventsArray = [];
+                    for (const doc of eventsSnapshot.docs) {
+                        const eventData = { id: doc.id, ...doc.data() };
+                        const eventStatus = await getStatus(doc.id); // Await the async status fetch
+                        eventData.status = eventStatus; // Add status to the event data
+                        eventsArray.push(eventData); // Push the updated event data into the array
+                    }
+                    createdEvents.value = eventsArray; // Update the reactive `createdEvents` variable
+                } catch (error) {
+                    console.error('Error fetching events:', error);
+                }
+            }
+
+            onMounted(() => {
+                getEvents();
+            });
+
+            return {
+                createdEvents,
+                getEvents,
+                getStatus: getStatusTag,
+                formatDate,
+                filters,
+                statuses,
+                store
+            };
+        },
     }
 </script>
 

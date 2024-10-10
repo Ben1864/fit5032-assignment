@@ -1,14 +1,15 @@
 <template>
+    <div v-if="currentEvent">
         <div class="row" style="height: 80vh;">
             <div class="col-8 offset-2 mt-2">
                 <div class="row justify-content-center">
                     <div class="col-7"><h1>{{ currentEvent.title }}</h1></div>
-                    <div v-if="!store.getters.userIsAttending(currentEvent)" class="col-5"><button type="button" @click="submitAttendance()" class="responsive-button action-btn btn btn-secondary">Attend</button></div>
+                    <div v-if="currentEvent.status == 'Not Attending'" class="col-5"><button type="button" @click="submitAttendance()" class="responsive-button action-btn btn btn-secondary">Attend</button></div>
                     <div v-else class="col-5"><button type="button" @click="removeAttendance()" class="btn-attending text-center responsive-button action-btn btn btn-secondary">Attending</button></div>
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex align-items-center">
-                        <span v-for="tag in currentEvent.tags" class="badge badge-tags me-2">{{ tag }}</span>
+                        <span v-for="tag in currentEvent.tags" class="badge badge-tags me-2">{{ tag.code }}</span>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -30,60 +31,112 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div v-else>
+        <p>Loading event...</p>
+  </div>
 </template>
 
-<script setup>
-    import events from '../assets/json/events.json'
+<script>
     import { useStore } from 'vuex'
-    import { ref } from 'vue'
+    import { ref, onMounted } from 'vue'
+    import { doc, getDoc } from "firebase/firestore"; // Import necessary Firestore methods
+    import { db } from '@/firebase/init';
 
-    const store = useStore()
-    const props = defineProps({ id: String })
-    const currentEvent = events.find(event => props.id == event.id)
-    const badgeColour = ref('#dc3545')
-    if (store.getters.userIsAttending(currentEvent)){
-        currentEvent.status = 'Attending'
-        badgeColour.value = '#28a745'
-    }else {
-        currentEvent.status = 'Not Attending'
-        badgeColour.value = '#dc3545'
-    }
-   
-    console.log(store.state)
-    const convertDateFormat = (dateStr) => {
+    export default {
+    props: {
+        id: {
+        type: String,
+        required: true
+        }
+    },
+    setup(props) {
+        const store = useStore();
+        const currentEvent = ref(null);
+        const badgeColour = ref('#dc3545');
+        const currentEventDate = ref('');
+
+        // Fetch event by ID and set the reactive data
+        const getEventById = async (eventId) => {
+        try {
+            const eventDocRef = doc(db, 'events', eventId);
+            const eventDoc = await getDoc(eventDocRef);
+
+            if (eventDoc.exists()) {
+            return { id: eventDoc.id, ...eventDoc.data() };
+            } else {
+            console.log("No event found with the provided ID.");
+            return null;
+            }
+        } catch (error) {
+            console.error("Error fetching event:", error);
+            return null;
+        }
+        };
+
+        // Date formatting function
+        const convertDateFormat = (dateStr) => {
         const date = new Date(dateStr);
-
         return new Intl.DateTimeFormat('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         }).format(date);
-    }
-    const currentEventDate = convertDateFormat(currentEvent.date);
-    const submitAttendance = async () => {
-        try{
-            const successfulAttending = await store.dispatch('attendEvent', currentEvent);
-            if (successfulAttending) {
-                currentEvent.status = 'Attending'
-                badgeColour.value = '#28a745'
-            }
-        }catch (error) {
-            console.error('Error attending:', error);
-        }
-  };
+        };
 
-  const removeAttendance = async () => {
-        try{
-            const successfulRemoval = await store.dispatch('unattendEvent', currentEvent);
-            if (successfulRemoval) {
-                currentEvent.status = 'Not Attending'
-                badgeColour.value = '#dc3545'
+        // Load the event and set its status
+        onMounted(async () => {
+            currentEvent.value = await getEventById(props.id);
+
+            if (currentEvent.value) {
+                currentEventDate.value = convertDateFormat(currentEvent.value.date);
+
+                // Check if the user is attending the event
+                if (store.getters.userIsAttending(currentEvent.value)) {
+                currentEvent.value.status = 'Attending';
+                badgeColour.value = '#28a745';
+                } else {
+                currentEvent.value.status = 'Not Attending';
+                badgeColour.value = '#dc3545';
+                }
             }
-        }catch (error) {
-            console.error('Error attending this event: ', error);
+        });
+
+        // Attendance functions
+        const submitAttendance = async () => {
+        try {
+            const successfulAttending = await store.dispatch('attendEvent', currentEvent.value);
+            if (successfulAttending) {
+            currentEvent.value.status = 'Attending';
+            badgeColour.value = '#28a745';
+            }
+        } catch (error) {
+            console.error('Error attending event:', error);
         }
-  };
+        };
+
+        const removeAttendance = async () => {
+        try {
+            const successfulRemoval = await store.dispatch('unattendEvent', currentEvent.value);
+            if (successfulRemoval) {
+            currentEvent.value.status = 'Not Attending';
+            badgeColour.value = '#dc3545';
+            }
+        } catch (error) {
+            console.error('Error unattending this event:', error);
+        }
+        };
+
+        return {
+        currentEvent,
+        badgeColour,
+        currentEventDate,
+        submitAttendance,
+        removeAttendance
+        };
+    }
+};
 
 </script>
 
