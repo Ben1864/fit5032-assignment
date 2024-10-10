@@ -10,12 +10,16 @@
             <div class="d-flex align-items-center">
                 <div class="w-100 me-3"></div>
                 <div class="d-flex flex-shrink-0 col-12-sm">
+                    
                     <div v-if="store.state.isAuthenticated == false">
                         <router-link to="/login" active-class="active" aria-current="page">
                             <button type="button" class="login-btn btn btn-outline-light me-2">Login</button>
                         </router-link>
                     </div>
                     <div v-else>
+                        <router-link to="/attending-events" active-class="active" aria-current="page">
+                            <button type="button" class="login-btn btn btn-outline-light me-2">My Events</button>
+                        </router-link>
                         <button type="button"  class="login-btn btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
                     </div>
                 </div>
