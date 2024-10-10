@@ -69,7 +69,6 @@
     import Tag from 'primevue/tag';
     import Select from 'primevue/select';
     import { FilterMatchMode } from '@primevue/core/api';
-    import createdEvents from '../assets/json/events.json';
     import { useStore } from 'vuex'
     import { ref, onMounted } from 'vue';
     import { db, auth } from '@/firebase/init';

@@ -1,11 +1,11 @@
 <template>
     <div v-if="currentEvent">
-        <div class="row" style="height: 80vh;">
-            <div class="col-8 offset-2 mt-2">
+        <div id="currentEvent" class="row">
+            <div class="col-md-8 offset-md-2 col-10 offset-1 mt-2">
                 <div class="row justify-content-center">
                     <div class="col-7"><h1>{{ currentEvent.title }}</h1></div>
-                    <div v-if="currentEvent.status == 'Not Attending'" class="col-5"><button type="button" @click="submitAttendance()" class="responsive-button action-btn btn btn-secondary">Attend</button></div>
-                    <div v-else class="col-5"><button type="button" @click="removeAttendance()" class="btn-attending text-center responsive-button action-btn btn btn-secondary">Attending</button></div>
+                    <div v-if="currentEvent.status == 'Not Attending'" class="col-5"><button type="button" @click="submitAttendance()" class="responsive-button action-btn btn btn-secondary exclude-from-pdf">Attend</button></div>
+                    <div v-else class="col-5"><button type="button" @click="removeAttendance()" class="btn-attending text-center responsive-button action-btn btn btn-secondary exclude-from-pdf">Attending</button></div>
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex align-items-center">
@@ -29,8 +29,13 @@
                     <div class="event-info">{{ currentEvent.organiser }}, {{ currentEvent.contact.email }}</div><br>
                     <div class="event-info">{{ currentEvent.contact.phone }}</div>
                 </div>
-            </div>
+            </div> 
         </div>
+        <div class="row mt-3 col-md-8 offset-md-2 col-10 offset-1">
+                <div class="col-8">
+                    <button type="button" class="btn action-btn responsive-button" @click="exportToPDF()">Export as PDF</button>
+                </div>
+            </div>
     </div>
     <div v-else>
         <p>Loading event...</p>
@@ -42,6 +47,7 @@
     import { ref, onMounted } from 'vue'
     import { doc, getDoc } from "firebase/firestore"; // Import necessary Firestore methods
     import { db } from '@/firebase/init';
+    import html2pdf from 'html2pdf.js';
 
     export default {
     props: {
@@ -128,12 +134,35 @@
         }
         };
 
+        const exportToPDF = async () => {
+            try {
+                // Exclude unwanted elements from pdf
+                const excludedElements = document.querySelectorAll('.exclude-from-pdf');
+                excludedElements.forEach(el => el.style.display = 'none');
+
+                const html = document.getElementById('currentEvent');
+                if (html) {
+                    const opt = {
+                        filename: 'FreshMind ' + currentEvent.value.title
+                    }
+                    await html2pdf().set(opt).from(html).save();
+                } else {
+                    throw new Error('Element not found');
+                }
+                // Reset elements after PDF is generated
+                excludedElements.forEach(el => el.style.display = '');
+            } catch (error) {
+                console.error('Error exporting PDF:', error);
+            }
+        }
+
         return {
         currentEvent,
         badgeColour,
         currentEventDate,
         submitAttendance,
-        removeAttendance
+        removeAttendance,
+        exportToPDF
         };
     }
 };
@@ -185,6 +214,12 @@
   .responsive-button {
     font-size: 20px;
     padding: 0.5rem 1rem;
+  }
+}
+
+@media print {
+  .exclude-from-pdf {
+    display: none;
   }
 }
 </style>

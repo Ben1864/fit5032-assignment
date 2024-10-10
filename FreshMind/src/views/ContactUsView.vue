@@ -1,5 +1,5 @@
 <template>
-    <div class="col-4 offset-4">
+    <div class="col-8 offset-2 col-md-4 offset-md-4">
       <h1>Contact Us</h1>
       <p>If you have any questions, feel free to reach out to us using the form below.</p>
   
@@ -15,6 +15,18 @@
           <input type="email" id="email" class="form-control" v-model="formData.email" required />
           <span v-if="errors.email" class="error">{{ errors.email }}</span>
         </div>
+
+        <div class="mb-3">
+            <label for="reason" class="form-label">Reason for contact:</label>
+            <select id="reason" class="form-select" v-model="formData.reason" required>
+                <option value="" disabled>Select a reason</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Support Request">Support Request</option>
+                <option value="Partnership Inquiry">Partnership Inquiry</option>
+                <option value="Other Inquiry">Other</option>
+            </select>
+            <span v-if="errors.reason" class="error">{{ errors.reason }}</span>
+        </div>
   
         <div class="mb-3">
           <label for="message" class="form-label">Message:</label>
@@ -28,7 +40,7 @@
   
       
     </div>
-    <div class="col-4 offset-4">
+    <div class="col-8 offset-2 col-md-4 offset-md-4">
         <h2>Contact Information</h2>
         <p>Email: <a href="mailto:info@example.com">support@freshmind.com</a></p>
         <p>Phone: <a href="tel:+6123456789">+61 2345678910</a></p>
@@ -38,18 +50,21 @@
   
   <script>
   import { ref } from 'vue';
+  import axios from 'axios';
   
   export default {
     setup() {
       const formData = ref({
         name: '',
         email: '',
+        reason: '',
         message: '',
       });
   
       const errors = ref({
         name: '',
         email: '',
+        reason: '',
         message: '',
       });
   
@@ -58,34 +73,54 @@
         errors.value.name = '';
         errors.value.email = '';
         errors.value.message = '';
-  
-        if (!formData.value.name) {
+        errors.value.reason = '';
+        
+        if (formData.value.name.length == 1) {
           errors.value.name = 'Name is required.';
           valid = false;
         }
-        if (!formData.value.email) {
-          errors.value.email = 'Email is required.';
+        if (formData.value.email.length == 1) {
+          errors.value.email = 'Please provide email';
           valid = false;
         } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
           errors.value.email = 'Email is invalid.';
           valid = false;
         }
-        if (!formData.value.message) {
-          errors.value.message = 'Message is required.';
+        if(formData.value.reason.value) {
+            errors.value.reason = 'Please provide a reason for contact';
+        }
+        if (formData.value.message.length < 10) {
+          errors.value.message = 'Please provide more detail.';
           valid = false;
         }
   
         return valid;
       };
   
-      const handleSubmit = () => {
-        if (validateForm()) {
-          // Send the form data to your backend or an email service here
-          console.log('Form submitted:', formData.value);
-          // Reset form
-          formData.value = { name: '', email: '', message: '' };
+      const handleSubmit = async () => {
+        try {
+            if (validateForm()) {
+            const url = 'http://127.0.0.1:5001/freshmind-12b06/us-central1/sendEmail';
+            const body = {
+                from: formData.value.email,
+                subject: formData.value.reason,
+                message: formData.value.message
+            }
+            const response = await axios.post(url, body);
+
+            if (response.status === 200) {
+                console.log(response.data.message);
+            } else {
+                console.error(response.data.error);
+            }
+
+            formData.value = { name: '', email: '', reason: '', message: '' };
+            }
+        } catch (error) {
+            console.log("Error while sending email: ", error);
+
         }
-      };
+    };
   
       return {
         formData,
@@ -108,10 +143,6 @@
     border: #000000 solid 1.5px;
     color: white;
     
-  }
-  
-  button:hover {
-    background-color: #218838;
   }
   
   .error {
