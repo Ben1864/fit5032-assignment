@@ -1,11 +1,14 @@
 <template>
     <div class="row align-items-center mt-3">
-        <div class="col-12 col-md-6 offset-md-3 text-center order-1 order-md-0">
+        <div class="col-12 col-lg-3 text-center ">
+            <button @click="exportToCSV" class="btn btn-primary action-btn responsive-button">Export to CSV</button>
+        </div>
+        <div class="col-12 col-lg-6 text-center order-1 order-md-0">
             <h1>Community Events</h1>
         </div>
-        <div v-if="store.state.isAdmin" class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0 order-2 order-md-1">
+        <div v-if="store.state.isAdmin" class="col-12 col-lg-3 text-center text-lg-end mt-3 mt-lg-0 order-2 order-lg-1">
             <router-link to="/add-event" active-class="active" aria-current="page">
-            <button type="button" class="responsive-button action-btn btn btn-secondary me-2">Add Event</button>
+                <button type="button" class="responsive-button action-btn btn btn-secondary me-2">Add Event</button>
             </router-link>  
         </div>
     </div>
@@ -15,8 +18,8 @@
         </div>
     </div>
     <div v-else class="row mt-5 medium-text">
-        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" tableStyle="min-width: 20rem">
-            <Column field="title" sortable header="Event Title">
+        <DataTable v-model:filters="filters" :value="createdEvents" paginator :rows="10" filterDisplay="row" responsive>
+            <Column field="title" sortable header="Event Title" style="width: 20%">
                 <template #body="{ data }">
                     {{ data.title }}
                 </template>
@@ -24,7 +27,7 @@
                     <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by title" />
                 </template>
             </Column>
-            <Column field="location" sortable header="Location">
+            <Column field="location" sortable header="Location" style="width: 25%">
                 <template #body="{ data }">
                     {{ data.location }}
                 </template>
@@ -32,7 +35,7 @@
                     <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by location" />
                 </template>
             </Column>
-            <Column field="date" sortable header="Date">
+            <Column field="date" sortable header="Date" style="width: 5%">
                 <template #body="slotProps">
                     {{ formatDate(slotProps.data.date) }}
                 </template>
@@ -40,14 +43,14 @@
                     <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by date" />
                 </template>
             </Column>
-            <Column header="More Info">
+            <Column header="More Info" style="width: 20%">
                 <template #body="slotProps">
                     <router-link :to="`/community-events/${slotProps.data.id}`" active-class="active" aria-current="page">
-                        <button type="button" class="responsive-button action-btn btn btn-secondary me-2">More Info</button>
+                        <button type="button" class="responsive-button action-btn btn btn-secondary me-3">More Info</button>
                     </router-link>
                 </template>
             </Column>
-            <Column field="status" sortable header="Status">
+            <Column field="status" sortable header="Status" style="width: 5%">
                 <template #body="{ data }">
                     <Tag :value="data.status" :severity="getStatus(data.status)" />
                 </template>
@@ -70,9 +73,10 @@
     import Select from 'primevue/select';
     import { FilterMatchMode } from '@primevue/core/api';
     import { useStore } from 'vuex'
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, createRenderer } from 'vue';
     import { db, auth } from '@/firebase/init';
     import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+    import Papa from 'papaparse';
 
     export default {
         components: {
@@ -162,6 +166,38 @@
                 store
             };
         },
+        methods: {
+            exportToCSV() {
+                let csvEvents= [];
+                console.log(this.createdEvents)
+                for (const createdEvent of this.createdEvents) {
+                    console.log(createdEvent.tags.map(tag => tag.code).join(', '));
+                    const newEvent ={
+                        title: createdEvent.title,
+                        description: createdEvent.description,
+                        location: createdEvent.location,
+                        date: createdEvent.date,
+                        finishTime: createdEvent.finishTime,
+                        startTime: createdEvent.startTime,
+                        tags: createdEvent.tags.map(tag => tag.code).join(', '),
+                        organiser: createdEvent.organiser,
+                        contactEmail: createdEvent.contact.email,
+                        contactPhone: createdEvent.contact.phone
+                    }
+                    csvEvents.push(newEvent);
+                }
+                const csvData = Papa.unparse(csvEvents);
+                const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'events.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
     }
 </script>
 
@@ -177,14 +213,14 @@
 }
 
 .responsive-button {
-  font-size: 1.5rem; /* Default size */
-  padding: 0.25rem 0.75rem; 
+  font-size: 1.5rem;
+  white-space: nowrap;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 992px) {
   .responsive-button {
-    font-size: 80px;
-    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    padding: 10px;
   }
 }
 </style>

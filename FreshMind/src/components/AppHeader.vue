@@ -27,7 +27,7 @@
         </div>
     </header>
     <nav class="bg-light border-bottom align-items-center">
-        <ul class="logo-position nav me-auto">
+        <ul class="logo-position nav me-auto responsive-font">
             <div class="dropdown">
                 <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
                     Get Help
