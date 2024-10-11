@@ -96,17 +96,18 @@
         errors.value.email = '';
         errors.value.message = '';
         errors.value.reason = '';
-        
-        if (formData.value.name.length == 1) {
-          errors.value.name = 'Name is required.';
-          valid = false;
-        }
-        if (formData.value.email.length == 1) {
-          errors.value.email = 'Please provide email';
-          valid = false;
-        } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
-          errors.value.email = 'Email is invalid.';
-          valid = false;
+        if (!store.state.isAuthenticated) {
+          if (formData.value.name.length == 1) {
+            errors.value.name = 'Name is required.';
+            valid = false;
+          }
+          if (formData.value.email.length == 1) {
+            errors.value.email = 'Please provide email';
+            valid = false;
+          } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
+            errors.value.email = 'Email is invalid.';
+            valid = false;
+          }
         }
         if(formData.value.reason.value) {
             errors.value.reason = 'Please provide a reason for contact';
@@ -157,7 +158,7 @@
 
                 formData.value = { name: '', email: '', reason: '', message: '' };
                 files.value = [];
-                ref.fileInput.value = '';
+                document.getElementById("attachments").value = ''
             }
         } catch (error) {
             console.log("Error while sending email: ", error);
