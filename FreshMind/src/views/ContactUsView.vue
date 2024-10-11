@@ -4,16 +4,18 @@
       <p>If you have any questions, feel free to reach out to us using the form below.</p>
   
       <form @submit.prevent="handleSubmit" class="medium-text">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name:</label>
-          <input type="text" id="name" class="form-control" v-model="formData.name" required />
-          <span v-if="errors.name" class="error">{{ errors.name }}</span>
-        </div>
-  
-        <div class="mb-3">
-          <label for="email" class="form-label">Email:</label>
-          <input type="email" id="email" class="form-control" v-model="formData.email" required />
-          <span v-if="errors.email" class="error">{{ errors.email }}</span>
+        <div v-if="!store.state.isAuthenticated">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" id="name" class="form-control" v-model="formData.name" required />
+            <span v-if="errors.name" class="error">{{ errors.name }}</span>
+          </div>
+    
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" class="form-control" v-model="formData.email" required />
+            <span v-if="errors.email" class="error">{{ errors.email }}</span>
+          </div>
         </div>
 
         <div class="mb-3">
@@ -33,8 +35,12 @@
           <textarea id="message" class="form-control" v-model="formData.message" rows="3" required></textarea>
           <span v-if="errors.message" class="error">{{ errors.message }}</span>
         </div>
+        <div class="mb-3 custom-file">
+            <label for="attachments" class="custom-file-label">Attachments:</label>
+            <input type="file" class="custom-file-input" id="attachments" @change="handleFileUpload" multiple ref="fileInput"/>
+        </div>
         <div class="text-center mb-3">
-        <button type="submit" class="btn action-btn">Send Message</button>
+        <button type="submit" class="btn action-btn">Send Email</button>
         </div>
       </form>
   
@@ -51,7 +57,10 @@
   <script>
   import { ref } from 'vue';
   import axios from 'axios';
+  import { auth } from '@/firebase/init';
+  import { useStore } from 'vuex';
   
+
   export default {
     setup() {
       const formData = ref({
@@ -67,24 +76,38 @@
         reason: '',
         message: '',
       });
-  
+      
+      const files = ref([])
+      const store = useStore()
+      const handleFileUpload = (event) => {
+        files.value = Array.from(event.target.files); // Convert FileList to Array
+      }
+      const handleFileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(',')[1]); // Get base64 string
+          reader.onerror = error => reject(error);
+          reader.readAsDataURL(file);
+        });
+      };
       const validateForm = () => {
         let valid = true;
         errors.value.name = '';
         errors.value.email = '';
         errors.value.message = '';
         errors.value.reason = '';
-        
-        if (formData.value.name.length == 1) {
-          errors.value.name = 'Name is required.';
-          valid = false;
-        }
-        if (formData.value.email.length == 1) {
-          errors.value.email = 'Please provide email';
-          valid = false;
-        } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
-          errors.value.email = 'Email is invalid.';
-          valid = false;
+        if (!store.state.isAuthenticated) {
+          if (formData.value.name.length == 1) {
+            errors.value.name = 'Name is required.';
+            valid = false;
+          }
+          if (formData.value.email.length == 1) {
+            errors.value.email = 'Please provide email';
+            valid = false;
+          } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
+            errors.value.email = 'Email is invalid.';
+            valid = false;
+          }
         }
         if(formData.value.reason.value) {
             errors.value.reason = 'Please provide a reason for contact';
@@ -100,21 +123,42 @@
       const handleSubmit = async () => {
         try {
             if (validateForm()) {
-            const url = 'http://127.0.0.1:5001/freshmind-12b06/us-central1/sendEmail';
-            const body = {
-                from: formData.value.email,
-                subject: formData.value.reason,
-                message: formData.value.message
-            }
-            const response = await axios.post(url, body);
+                const url = 'http://127.0.0.1:5001/freshmind-12b06/us-central1/sendEmail';
 
-            if (response.status === 200) {
-                console.log(response.data.message);
-            } else {
-                console.error(response.data.error);
-            }
+                const attachments = await Promise.all(
+                      files.value.map(file => handleFileToBase64(file))
+                );
 
-            formData.value = { name: '', email: '', reason: '', message: '' };
+
+                const name = store.state.isAuthenticated ? store.state.userData.firstName : formData.value.name;
+                const email = store.state.isAuthenticated ? store.state.userData.email : formData.value.email;
+                // Email for contact to "FreshMind"
+                const reqBody = {
+                    to: "ridgesben1864@gmail.com",
+                    subject: formData.value.reason,
+                    message: formData.value.message,
+                    attachments: files.value.map((file, index) => ({
+                      filename: file.name,
+                      data: attachments[index], // base64 encoded data
+                    })),
+                }
+                await axios.post(url, reqBody, {
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                // Email for notifying the user of contact
+                const notifyBody = {
+                    to: email,
+                    subject: "Thank you for Contacting Us",
+                    message: "Thank you for contacting us " + name + " we will get back to you with a response shortly."
+                }
+                await axios.post(url, notifyBody, {
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                formData.value = { name: '', email: '', reason: '', message: '' };
+                files.value = [];
+                document.getElementById("attachments").value = ''
             }
         } catch (error) {
             console.log("Error while sending email: ", error);
@@ -126,6 +170,8 @@
         formData,
         errors,
         handleSubmit,
+        handleFileUpload,
+        store
       };
     },
   };

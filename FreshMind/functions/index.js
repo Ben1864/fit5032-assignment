@@ -8,33 +8,75 @@
  */
 
 const {onRequest} = require("firebase-functions/v2/https");
-const functions = require("firebase-functions");
-const cors = require("cors")({origin: true});
-const postmark = require('postmark');
+const AWS = require('aws-sdk');
+const cors = require('cors')({origin: true});
+const { Buffer } = require('buffer');
 
-const client = new postmark.ServerClient("REDCATED_KEY");
+
+AWS.config.update({
+  accessKeyId: "REDACTED_KEY",
+  secretAccessKey: "REDACTED_SECRET",
+  region: "ap-southeast-2",
+});
+
+const ses = new AWS.SES();
 
 exports.sendEmail = onRequest(async (req, res) =>{
-  cors(req, res, async () => {
-    const {from, subject, message} = req.body;
-    if (!from || !subject || !message) {
-      return res.status(400).send("Missing required fields.");
-    }
-    try {
-      const response = await client.sendEmail({
-        From: from,
-        To: "brid0004@student.monash.edu",
-        Subject: subject,
-        TextBody: message,
-      });
-      console.log("Email sent successfully: ", response);
-      return res.status(200).send("Email sent successfully");
-    } catch(error) {
-      console.error("Error sending email: ", error);
-      return res.status(500).send("Error sending email")
-    }
-  });
-})
+    cors(req, res, async () => {
+      const { to, subject, message, attachments } = req.body;
+      if (!to || !subject || !message) {
+        return res.status(400).send("Missing required fields.");
+      }
+      try {
+
+        const boundary = "NextPart";
+        let emailBody = [
+          `From: ridgesben1864@gmail.com`,
+          `To: ${to}`,
+          `Subject: ${subject}`,
+          `MIME-Version: 1.0`,
+          `Content-Type: multipart/mixed; boundary="${boundary}"`,
+          ``,
+          `--${boundary}`,
+          `Content-Type: text/plain; charset=UTF-8`,
+          `Content-Transfer-Encoding: 7bit`,
+          ``,
+          `${message}`,
+          ``,
+        ].join("\n");
+
+        // If there is an attachment, append it to the email body
+        if (attachments && attachments.length>0) {
+          for (const attachment of attachments) {
+            emailBody += [
+              `--${boundary}`,
+              `Content-Type: application/octet-stream; name="${attachment.filename}"`,
+              `Content-Description: ${attachment.filename}`,
+              `Content-Disposition: attachment; filename="${attachment.filename}";`,
+              `Content-Transfer-Encoding: base64`,
+              ``,
+              `${attachment.data}`, // The base64 encoded attachment data
+              ``
+            ].join("\n");
+          }
+        }
+      emailBody += `--${boundary}--`;
+        const params = {
+          RawMessage: {
+            Data: Buffer.from(emailBody),
+          },
+          Source: "ridgesben1864@gmail.com",
+          Destinations:[to],
+        };
+        console.log("got here")
+        await ses.sendRawEmail(params).promise();
+        return res.status(200).send("Email sent successfully");
+      } catch (error) {
+        console.error("Error sending email: ", error);
+        return res.status(500).send("Error sending email");
+      };
+    });
+  })
 
 
 // Create and deploy your first functions
