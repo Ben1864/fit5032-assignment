@@ -1,6 +1,6 @@
 <template>
     <div class="row align-items-center mt-3">
-        <div class="col-12 col-lg-3 text-center ">
+        <div v-if="store.state.isAuthenticated" class="col-12 col-lg-3 text-center ">
             <button @click="exportToCSV" class="btn btn-primary action-btn responsive-button">Export to CSV</button>
         </div>
         <div class="col-12 col-lg-6 text-center order-1 order-md-0">
