@@ -30,6 +30,10 @@ a,
   padding: 0.75rem 1.5rem; 
 }
 
+.medium-text{
+  font-size: 20px; 
+}
+
 @media (max-width: 767px) {
   .responsive-button {
     font-size: 20px;

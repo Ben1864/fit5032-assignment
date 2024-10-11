@@ -27,7 +27,7 @@
         </div>
     </header>
     <nav class="bg-light border-bottom align-items-center">
-        <ul class="logo-position nav me-auto">
+        <ul class="logo-position nav me-auto responsive-font">
             <div class="dropdown">
                 <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
                     Get Help
@@ -63,7 +63,7 @@
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
                     <li><router-link to="/about" class="dropdown-item">About Us</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Contact Us</router-link></li>
+                    <li><router-link to="/contact-us" class="dropdown-item">Contact Us</router-link></li>
                     <li><router-link to="/reviews" class="dropdown-item">Reviews</router-link></li>
                 </ul>
             </div>
