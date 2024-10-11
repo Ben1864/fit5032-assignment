@@ -123,7 +123,7 @@
       const handleSubmit = async () => {
         try {
             if (validateForm()) {
-                const url = 'http://127.0.0.1:5001/freshmind-12b06/us-central1/sendEmail';
+                const url = 'https://sendemail-iqi6mt4tya-uc.a.run.app';
 
                 const attachments = await Promise.all(
                       files.value.map(file => handleFileToBase64(file))
