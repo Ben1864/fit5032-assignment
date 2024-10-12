@@ -61,14 +61,14 @@
       <div class="row">
         <div class="col-6">
           <label for="contactEmail">Contact Email</label>
-          <input v-model="event.contact.email" type="email" id="contactEmail" required />
+          <input v-model="event.contact.email" type="text" id="contactEmail" required />
           <span v-if="errors.email" class="error">{{ errors.email }}</span>
         </div>
   
         <div class="col-6">
           <label for="contactPhone">Contact Phone</label>
-          <input v-model="event.contact.phone" type="tel" id="contactPhone" required />
-          <span v-if="errors.email" class="error">{{ errors.email }}</span>
+          <input v-model="event.contact.phone" type="text" id="contactPhone" required />
+          <span v-if="errors.phone" class="error">{{ errors.phone }}</span>
         </div>
       </div>
   
@@ -83,6 +83,7 @@
   import { db } from "@/firebase/init";
 import { useRouter } from 'vue-router';
 import { encodeInput } from '@/utils/xss';
+
   
   export default {
     components: {
@@ -111,7 +112,7 @@ import { encodeInput } from '@/utils/xss';
             { code: 'Awareness' },
             { code: 'Community' },
         ],
-        errors: {}
+        errors: {},
       };
     },
     methods: {
@@ -153,34 +154,32 @@ import { encodeInput } from '@/utils/xss';
     },
     async addEvent() {
       try {
-        // Reference to the Firestore events collection
-        if (this.validateForm()){
-            
+        if (!this.validateForm()){
             return
         }
         
-        newEvent = {
+        const newEvent = {
             title: encodeInput(this.event.title),
             description: encodeInput(this.event.description),
-            date: encodeInput(this.event.date),
-            startTime: encodeInput(this.event.startTime),
-            finishTime: encodeInput(this.event.finishTime),
+            date: this.event.date,
+            startTime: this.event.startTime,
+            finishTime: this.event.finishTime,
             location: encodeInput(this.event.location),
             organiser: encodeInput(this.event.organiser),
             tags: this.event.tags,
             contact: {
-                email: encodeInput(this.event.email),
-                phone: encodeInput(this.event.phone)
+                email: encodeInput(this.event.contact.email),
+                phone: encodeInput(this.event.contact.phone)
             },
             status: null
         }
         
         const eventRef = collection(db, "events");  
         // Add the event to Firestore
-        await addDoc(eventRef, this.event);  
+        await addDoc(eventRef, newEvent);  
         // Success message or redirect can be added here
         alert("Event added successfully!");
-        useRouter().push({name:'CommunityEvents'})
+        
       } catch (error) {
         console.error("Error adding event: ", error);
       }
@@ -220,19 +219,6 @@ import { encodeInput } from '@/utils/xss';
     border-radius: 4px;
   }
   
-  button {
-    padding: 0.75em 1.5em;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-
   .error {
     color: red;
     font-size: 0.8rem;
