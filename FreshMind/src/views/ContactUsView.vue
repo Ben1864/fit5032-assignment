@@ -59,6 +59,7 @@
   import axios from 'axios';
   import { auth } from '@/firebase/init';
   import { useStore } from 'vuex';
+  import { encodeInput } from '@/utils/xss';
   
 
   export default {
@@ -130,13 +131,13 @@
                 );
 
 
-                const name = store.state.isAuthenticated ? store.state.userData.firstName : formData.value.name;
-                const email = store.state.isAuthenticated ? store.state.userData.email : formData.value.email;
+                const name = store.state.isAuthenticated ? store.state.userData.firstName : encodeInput(formData.value.name);
+                const email = store.state.isAuthenticated ? store.state.userData.email : encodeInput(formData.value.email);
                 // Email for contact to "FreshMind"
                 const reqBody = {
                     to: "ridgesben1864@gmail.com",
                     subject: formData.value.reason,
-                    message: formData.value.message,
+                    message: encodeInput(formData.value.message),
                     attachments: files.value.map((file, index) => ({
                       filename: file.name,
                       data: attachments[index], // base64 encoded data
