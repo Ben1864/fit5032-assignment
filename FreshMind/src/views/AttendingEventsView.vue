@@ -82,12 +82,11 @@ export default {
           if (userData.attendingEvents && userData.attendingEvents.length > 0) {
             const eventIds = userData.attendingEvents;
             console.log(eventIds)
-            // Fetch events based on attending event IDs
             const eventPromises = eventIds.map(eventId => getDoc(doc(db, 'events', eventId)));
             const eventDocs = await Promise.all(eventPromises);
             console.log(eventDocs.size)
             attendingEvents.value = eventDocs
-            .filter(doc => doc.exists()) // Filter out any non-existing docs
+            .filter(doc => doc.exists())
             .map(doc => ({ id: doc.id, ...doc.data() }));
           }
         } else {
@@ -101,11 +100,10 @@ export default {
     };
 
     onMounted(() => {
-      // Use onAuthStateChanged to check if the user is logged in before proceeding
       onAuthStateChanged(auth, (user) => {
         if (user) {
           console.log(user.uid)
-          fetchAttendingEvents(user.uid); // Call the function with the user's ID
+          fetchAttendingEvents(user.uid);
         } else {
           console.log('No user is logged in');
           loading.value = false;

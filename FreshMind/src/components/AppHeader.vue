@@ -33,18 +33,7 @@
                     Get Help
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">For Myself</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">For Someone Else</router-link></li>
-                </ul>
-            </div>
-            <div class="dropdown">
-                <a class="dropdown-toggle show nav-link header-link" href="#" id="dropdownNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-                    Get Information
-                </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Mental Health Conditions</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Facts and Stats</router-link></li>
-                    <li><router-link to="/" class="dropdown-item">Resources</router-link></li>
+                    <li><router-link to="/find-support" class="dropdown-item">Find Nearby Support</router-link></li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -52,9 +41,7 @@
                     Get Involved
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/" class="dropdown-item">Volunteering</router-link></li>
                     <li><router-link to="/community-events" class="dropdown-item">Community Events</router-link></li>
-                    <li v-if="store.state.isAdmin == true"><router-link to="/" class="dropdown-item">Dashboard</router-link></li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -62,7 +49,6 @@
                     About
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownNavLink">
-                    <li><router-link to="/about" class="dropdown-item">About Us</router-link></li>
                     <li><router-link to="/contact-us" class="dropdown-item">Contact Us</router-link></li>
                     <li><router-link to="/reviews" class="dropdown-item">Reviews</router-link></li>
                 </ul>
