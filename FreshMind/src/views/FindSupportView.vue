@@ -25,7 +25,7 @@ export default {
     };
   },
   mounted() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYmVuMTg2NCIsImEiOiJjbTI0aGwwY2cwZ2ozMmxvZ290enY2czA3In0.F_sF0Nzj1g9AECEAFqhKCA';
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
     // Get user's current location
     if (navigator.geolocation) {
