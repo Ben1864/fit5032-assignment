@@ -68,6 +68,11 @@ const router = createRouter({
       path: '/contact-us',
       name: 'ContactUs',
       component: () => import('../views/ContactUsView.vue')
+    },
+    {
+      path: '/find-support',
+      name: 'FindSupport',
+      component: () => import('../views/FindSupportView.vue')
     }
   ]
 })
