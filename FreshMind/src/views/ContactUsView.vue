@@ -148,6 +148,9 @@
                 });
 
                 // Email for notifying the user of contact
+                // This only works for ridgesben1864@gmail.com, because of amazon ses sandbox mode
+                // If you want to verify this, please let me know and I can add you as a verified identity
+                // Or see video
                 const notifyBody = {
                     to: email,
                     subject: "Thank you for Contacting Us",
