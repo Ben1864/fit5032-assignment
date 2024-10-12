@@ -27,7 +27,6 @@ export default {
   mounted() {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
-    // Get user's current location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -56,9 +55,6 @@ export default {
         zoom: 12, 
       });
       this.map.addControl(new mapboxgl.NavigationControl());
-    },
-    getDirections() {
-
     }
   },
   beforeDestroy() {
