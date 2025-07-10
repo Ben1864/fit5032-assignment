@@ -6,8 +6,8 @@
       </div>
       <div id="map" class="map"></div>
       <div class="text-center mt-3">
-        <button class="btn btn-primary" @click="getDirections">
-          Get Directions to Nearest Support
+        <button class="btn btn-primary action-btn" @click="getDirections">
+          Find Nearest Support
         </button>
       </div>
     </div>
@@ -15,6 +15,7 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
   data() {
@@ -72,5 +73,8 @@ export default {
         height: 500px;
         border-radius: 8px;
         border: 1px solid #ddd;
+    }
+    .action-btn{
+      width: 40%
     }
 </style>
